@@ -1,5 +1,5 @@
 import pygame, sys, random
-
+from Player_Class import *
 #screen#
 
 SCREEN_WIDTH = 1280
@@ -15,11 +15,11 @@ game = True
 
 #-----------players-----------#
 
-class player: 
+'''class player: 
     def __init__(self, player_sprite,x,y):
         self.speed = 2
         self.sprite = player_sprite
-        self.rect = pygame.Rect(x,y, 40,50)
+        self.rect = pygame.Rect(x,y, 40,50)'''
 
 
 pygame.init()
