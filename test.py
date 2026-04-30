@@ -1,6 +1,5 @@
 import pygame, sys, random
 from Player_Class import *
-from Platform_Class import *
 #screen#
 
 SCREEN_WIDTH = 1280
@@ -34,8 +33,6 @@ while game == True:
 
     platforms = []
 
-
-
     pygame.draw.rect(screen, (150, 75, 0), pygame.Rect(0,450, SCREEN_WIDTH + 0, SCREEN_HEIGHT-450))
     pygame.draw.rect(screen, (0, 100, 0), pygame.Rect(0,450, SCREEN_WIDTH + 0, SCREEN_HEIGHT-710))
     pygame.draw.rect(screen, (0,0,0), player_1.rect)
@@ -43,8 +40,8 @@ while game == True:
     ###################################
  
     player_1.move()
-    player_1.jump_function()
-#    player_1.gravity_function()
+    player_1.jump_()
+    player_1.gravity_and_collision()
     ##################################
 
     pygame.display.update()
