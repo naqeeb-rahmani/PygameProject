@@ -11,4 +11,6 @@ class platform:
 
         self.rect = pygame.Rect(self.x,self.y, self.width,self.height)
 
+    
+
         

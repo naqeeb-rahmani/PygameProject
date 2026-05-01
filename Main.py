@@ -18,7 +18,10 @@ game = True
 
 pygame.init()
 
-player_1 = player(None, 400, 395)
+player_1 = player(None, 400, 350)
+
+#    p1 idle animation    #
+player_1_idle = pygame.image.load(r"Assets\Player_Sprites\Player_Idle\Player Idle 48x48.png")
 
 
 #screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEEN_HEIGHT), pygame.FULLSCREEN)
@@ -32,19 +35,22 @@ while game == True:
 
     #level 1
 
-    platforms = []
+    floor = platform(SCREEN_WIDTH, SCREEN_HEIGHT, 0, 450, (150,75,0))
+    grass = platform(SCREEN_WIDTH, SCREEN_HEIGHT - 710, 0, 450, (0,100,0))
+    platform_1 = platform(200, 20, 0, 430, (0,0,0))
 
+    platforms = [grass.rect, platform_1.rect]
 
-
-    pygame.draw.rect(screen, (150, 75, 0), pygame.Rect(0,450, SCREEN_WIDTH + 0, SCREEN_HEIGHT-450))
-    pygame.draw.rect(screen, (0, 100, 0), pygame.Rect(0,450, SCREEN_WIDTH + 0, SCREEN_HEIGHT-710))
+    pygame.draw.rect(screen, floor.colour, floor)
+    pygame.draw.rect(screen, grass.colour, grass)
+    pygame.draw.rect(screen, platform_1.colour, platform_1)
     pygame.draw.rect(screen, (0,0,0), player_1.rect)
 
     ###################################
  
     player_1.move()
+    player_1.gravity_and_collision(platforms)
     player_1.jump_function()
-#    player_1.gravity_function()
     ##################################
 
     pygame.display.update()
