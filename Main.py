@@ -21,7 +21,8 @@ pygame.init()
 player_1 = player(None, 400, 350)
 
 #    p1 idle animation    #
-player_1_idle = pygame.image.load(r"Assets\Player_Sprites\Player_Idle\Player Idle 48x48.png")
+#player_1_idle_spritesheet = pygame.image.load(r\) 
+
 
 
 #screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEEN_HEIGHT), pygame.FULLSCREEN)
@@ -64,10 +65,15 @@ while game == True:
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_d: player_1.direction = None
             if event.key == pygame.K_a: player_1.direction = None
+            
+            #jump
+        if event.type == pygame.KEYUP:
+            if event.key == pygame.K_w: 
+                if player_1.on_something: player_1.jump = True #trigger on key release to increase bugs such as double jumping
         
-        keys = pygame.key.get_pressed()
+        '''keys = pygame.key.get_pressed()
         if keys[pygame.K_w]:
-            if player_1.on_something: player_1.jump = True
+            if player_1.on_something: player_1.jump = True'''
             
 
 

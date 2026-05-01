@@ -5,7 +5,7 @@ class player:
         self.speed = 3
 
         self.jump = False
-        self.jump_height = 55
+        self.jump_height = 100
         self.jump_speed = 5
         self.jump_start_saved = False
         self.jump_start = None
