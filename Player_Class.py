@@ -7,11 +7,12 @@ class player:
         self.jump = False
         self.jump_height = 55
         self.jump_speed = 5
+        self.jump_start_saved = False
         self.jump_start = None
         
         self.on_something = False
 
-        self.fall_speed = 0
+        self.fall_speed = 2
         self.gravity = 0.5
         
         self.sprite = player_sprite
@@ -29,22 +30,28 @@ class player:
             self.rect.x = self.x
 
     def jump_function(self):
-        if self.jump != True and self.on_something != True:
-            self.jump_start = self.y 
-        elif self.jump == True and self.on_something == True:
+
+        if self.jump == True:
+            if self.jump_start_saved == False:
+                self.jump_start = self.y; self.jump_start_saved = True
+    
             self.y -= self.jump_speed; self.rect.y = self.y
             if (self.jump_start - self.y) > self.jump_height:
-                self.on_something = False; self.jump = False
+                self.jump = False; self.jump_start = None; self.jump_start_saved = False
         
-    def gravity_and_collision(self, platform):
-        for object in platform:
-            if self.rect.colliderect(object):
+    def gravity_and_collision(self, platforms):
+        for platform in platforms:
+            if self.rect.colliderect(platform):
                 self.on_something = True
                 self.fall_speed = 0
+                start_falling = False
                 return
-        self.fall_speed += self.gravity
-        self.y += self.fall_speed; self.rect.y = self.y
-        self.fall_speed = 2
+        if self.jump == False:
+            start_falling = True
+            self.on_something = False
+            self.fall_speed += self.gravity
+            self.y += self.fall_speed; self.rect.y = self.y
+            if self.on_something != True and start_falling != True: self.fall_speed = 2; start_falling = True
 
     def animation(self):
         #if self.direction != 

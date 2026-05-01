@@ -37,13 +37,13 @@ while game == True:
 
     floor = platform(SCREEN_WIDTH, SCREEN_HEIGHT, 0, 450, (150,75,0))
     grass = platform(SCREEN_WIDTH, SCREEN_HEIGHT - 710, 0, 450, (0,100,0))
-    platform_1 = platform(200, 20, 0, 430, (0,0,0))
+    #platform_1 = platform(200, 20, 0, 430, (0,0,0))
 
-    platforms = [grass.rect, platform_1.rect]
+    platforms = [floor.rect,grass.rect]
 
     pygame.draw.rect(screen, floor.colour, floor)
     pygame.draw.rect(screen, grass.colour, grass)
-    pygame.draw.rect(screen, platform_1.colour, platform_1)
+    #pygame.draw.rect(screen, platform_1.colour, platform_1)
     pygame.draw.rect(screen, (0,0,0), player_1.rect)
 
     ###################################
@@ -67,7 +67,7 @@ while game == True:
         
         keys = pygame.key.get_pressed()
         if keys[pygame.K_w]:
-            player_1.jump = True
+            if player_1.on_something: player_1.jump = True
             
 
 
