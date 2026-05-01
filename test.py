@@ -1,5 +1,6 @@
 import pygame, sys, random
 from Player_Class import *
+from Platform_Class import *
 #screen#
 
 SCREEN_WIDTH = 1280
@@ -17,7 +18,11 @@ game = True
 
 pygame.init()
 
-player_1 = player(None, 400, 395)
+player_1 = player(None, 400, 350)
+
+#    p1 idle animation    #
+#player_1_idle_spritesheet = pygame.image.load(r\) 
+
 
 
 #screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEEN_HEIGHT), pygame.FULLSCREEN)
@@ -31,17 +36,22 @@ while game == True:
 
     #level 1
 
-    platforms = []
+    floor = platform(SCREEN_WIDTH, SCREEN_HEIGHT, 0, 450, (150,75,0))
+    grass = platform(SCREEN_WIDTH, SCREEN_HEIGHT - 710, 0, 450, (0,100,0))
+    #platform_1 = platform(200, 20, 0, 430, (0,0,0))
 
-    pygame.draw.rect(screen, (150, 75, 0), pygame.Rect(0,450, SCREEN_WIDTH + 0, SCREEN_HEIGHT-450))
-    pygame.draw.rect(screen, (0, 100, 0), pygame.Rect(0,450, SCREEN_WIDTH + 0, SCREEN_HEIGHT-710))
+    platforms = [floor.rect,grass.rect]
+
+    pygame.draw.rect(screen, floor.colour, floor)
+    pygame.draw.rect(screen, grass.colour, grass)
+    #pygame.draw.rect(screen, platform_1.colour, platform_1)
     pygame.draw.rect(screen, (0,0,0), player_1.rect)
 
     ###################################
  
     player_1.move()
-    player_1.jump_()
-    player_1.gravity_and_collision()
+    player_1.gravity_and_collision(platforms)
+    player_1.jump_function()
     ##################################
 
     pygame.display.update()
@@ -55,10 +65,15 @@ while game == True:
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_d: player_1.direction = None
             if event.key == pygame.K_a: player_1.direction = None
+            
+            #jump
+        if event.type == pygame.KEYUP:
+            if event.key == pygame.K_w: 
+                if player_1.on_something: player_1.jump = True #trigger on key release to increase bugs such as double jumping
         
-        keys = pygame.key.get_pressed()
+        '''keys = pygame.key.get_pressed()
         if keys[pygame.K_w]:
-            player_1.jump = True
+            if player_1.on_something: player_1.jump = True'''
             
 
 
