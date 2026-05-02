@@ -20,13 +20,15 @@ pygame.init()
 
 player_1 = player(None, 400, 350)
 
-#    p1 idle animation    #
-#player_1_idle_spritesheet = pygame.image.load(r\) 
-
-
 
 #screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEEN_HEIGHT), pygame.FULLSCREEN)
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+
+#    p1 idle animation sheet   #
+
+player_1_idle_spritesheet = pygame.image.load("Assets\Player_Sprites\Player_Idle\Player Idle 48x48.png").convert_alpha()
+
+player_1.get_animation("idle", 10, player_1_idle_spritesheet, "left to right")
 
 ###################################################################################
 
@@ -46,6 +48,7 @@ while game == True:
     pygame.draw.rect(screen, grass.colour, grass)
     #pygame.draw.rect(screen, platform_1.colour, platform_1)
     pygame.draw.rect(screen, (0,0,0), player_1.rect)
+    screen.blit(player_1.animation["idle"][0], (player_1.x-35, player_1.y-25))
 
     ###################################
  

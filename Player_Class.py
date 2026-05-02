@@ -9,6 +9,14 @@ class player:
         self.jump_speed = 5
         self.jump_start_saved = False
         self.jump_start = None
+
+        self.animation = {
+            "idle": [],
+            "walk_right": [],
+            "walk_left": [],
+            "jump/fall": []
+
+        }
         
         self.on_something = False
 
@@ -17,7 +25,7 @@ class player:
         
         self.sprite = player_sprite
         self.x = x; self.y = y  
-        self.rect = pygame.Rect(self.x,self.y, 50,60)
+        self.rect = pygame.Rect(self.x,self.y, 60,100)
         self.direction = None #True = Right and False = Left
 
 
@@ -53,7 +61,20 @@ class player:
             self.y += self.fall_speed; self.rect.y = self.y
             if self.on_something != True and start_falling != True: self.fall_speed = 2; start_falling = True
 
+    def get_animation(self, animation_name, number_of_frames, animation_sheet, frames_order):
+        if frames_order == "left to right":
+            for frame_number in range(number_of_frames):
+                frame = animation_sheet.subsurface((frame_number*48, 0, 48, 48)); frame = pygame.transform.scale(frame, (144, 144)) 
+                self.animation[animation_name].append(frame)
+        elif frames_order == "right to left":
+            width = animation_sheet.get_width()
+            for frame_number in range(number_of_frames):
+                frame = animation_sheet.subsurface((((width -48) -(48*frame_number)), 0, 48, 48));  frame = pygame.transform.scale(frame, (144, 144)) 
+                self.animation[animation_name].append(frame)
+
+
+
     def animation(self):
-        #if self.direction != 
+    #    if self.direction == None and self.jump == False:
         pass
 

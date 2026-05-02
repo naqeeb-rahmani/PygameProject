@@ -21,7 +21,8 @@ pygame.init()
 player_1 = player(None, 400, 350)
 
 #    p1 idle animation    #
-#player_1_idle_spritesheet = pygame.image.load(r\) 
+player_1_idle_spritesheet = pygame.image.load(r"Assets\Player_Sprites\Player_Idle\Player Idle 48x48.png").convert_alpha()
+
 
 
 
@@ -38,13 +39,13 @@ while game == True:
 
     floor = platform(SCREEN_WIDTH, SCREEN_HEIGHT, 0, 450, (150,75,0))
     grass = platform(SCREEN_WIDTH, SCREEN_HEIGHT - 710, 0, 450, (0,100,0))
-    #platform_1 = platform(200, 20, 0, 430, (0,0,0))
+#    platform_1 = platform(200, 20, 0, 430, (0,0,0))
 
     platforms = [floor.rect,grass.rect]
 
     pygame.draw.rect(screen, floor.colour, floor)
     pygame.draw.rect(screen, grass.colour, grass)
-    #pygame.draw.rect(screen, platform_1.colour, platform_1)
+#    pygame.draw.rect(screen, platform_1.colour, platform_1)
     pygame.draw.rect(screen, (0,0,0), player_1.rect)
 
     ###################################
