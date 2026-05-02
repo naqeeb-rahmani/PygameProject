@@ -28,7 +28,7 @@ screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
 player_1_idle_spritesheet = pygame.image.load("Assets\Player_Sprites\Player_Idle\Player Idle 48x48.png").convert_alpha()
 
-player_1.get_animation("idle", 10, player_1_idle_spritesheet, "left to right")
+player_1.get_animations("idle", 10, player_1_idle_spritesheet, "left to right")
 
 ###################################################################################
 
@@ -40,18 +40,19 @@ while game == True:
 
     floor = platform(SCREEN_WIDTH, SCREEN_HEIGHT, 0, 450, (150,75,0))
     grass = platform(SCREEN_WIDTH, SCREEN_HEIGHT - 710, 0, 450, (0,100,0))
-    #platform_1 = platform(200, 20, 0, 430, (0,0,0))
+#    platform_1 = platform(200, 20, 0, 430, (0,0,0))
 
     platforms = [floor.rect,grass.rect]
 
     pygame.draw.rect(screen, floor.colour, floor)
     pygame.draw.rect(screen, grass.colour, grass)
-    #pygame.draw.rect(screen, platform_1.colour, platform_1)
+#    pygame.draw.rect(screen, platform_1.colour, platform_1)
     pygame.draw.rect(screen, (0,0,0), player_1.rect)
-    screen.blit(player_1.animation["idle"][0], (player_1.x-35, player_1.y-25))
+#    screen.blit(player_1.animation["idle"][0], (player_1.x-player_1.player_offset_rect_x, player_1.y-player_1.player_offset_rect_y))
 
     ###################################
  
+    player_1.animation(screen)
     player_1.move()
     player_1.gravity_and_collision(platforms)
     player_1.jump_function()
