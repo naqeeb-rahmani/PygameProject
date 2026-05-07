@@ -1,86 +1,140 @@
-import pygame, sys, random
-from Player_Class import *
-from Platform_Class import *
-#screen#
+import pygame
 
-SCREEN_WIDTH = 1280
-SCREEN_HEIGHT = 720
+class player: 
+    def __init__(self, x, y):
 
-clock = pygame.time.Clock()
-####################
+        self.ms = 0 #for animations because each animation runs 60/second
 
-#---------game-variables------------#
+        self.speed = 3
 
-game = True
-
-
-#-----------------------------------#
-
-pygame.init()
-
-player_1 = player(None, 400, 350)
+        self.jump = False
+        self.jump_height = 100
+        self.jump_speed = 5
+        self.jump_start_saved = False
+        self.jump_start = None
 
 
-#screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEEN_HEIGHT), pygame.FULLSCREEN)
-screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+        self.animations = {
+            "idle": {
+                "frames": [],
+                "number of frames": 10
+                },
 
-#    p1 idle animation sheet   #
+            "walk_right": {
+                "frames": [],
+                "number of frames": "idk"
+            },
 
-player_1_idle_spritesheet = pygame.image.load("Assets\Player_Sprites\Player_Idle\Player Idle 48x48.png").convert_alpha()
+            "walk_left": {
+                "frames": [],
+                "number of frames": "idk"
+            },
 
-player_1.get_animation("idle", 10, player_1_idle_spritesheet, "left to right")
+            "jump/fall": {
+                "frames": [],
+                "number of frames": "idk"
+            }
 
-###################################################################################
-
-while game == True:
-
-    screen.fill((255,255,255))
-
-    #level 1
-
-    floor = platform(SCREEN_WIDTH, SCREEN_HEIGHT, 0, 450, (150,75,0))
-    grass = platform(SCREEN_WIDTH, SCREEN_HEIGHT - 710, 0, 450, (0,100,0))
-    #platform_1 = platform(200, 20, 0, 430, (0,0,0))
-
-    platforms = [floor.rect,grass.rect]
-
-    pygame.draw.rect(screen, floor.colour, floor)
-    pygame.draw.rect(screen, grass.colour, grass)
-    #pygame.draw.rect(screen, platform_1.colour, platform_1)
-    pygame.draw.rect(screen, (0,0,0), player_1.rect)
-    screen.blit(player_1.animation["idle"][0], (player_1.x-35, player_1.y-25))
-
-    ###################################
- 
-    player_1.move()
-    player_1.gravity_and_collision(platforms)
-    player_1.jump_function()
-    ##################################
-
-    pygame.display.update()
-    clock.tick(60)
-    for event in pygame.event.get():
-
-
-        if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_d: player_1.direction = "Right"
-            if event.key == pygame.K_a: player_1.direction = "Left"
-        if event.type == pygame.KEYUP:
-            if event.key == pygame.K_d: player_1.direction = None
-            if event.key == pygame.K_a: player_1.direction = None
-            
-            #jump
-        if event.type == pygame.KEYUP:
-            if event.key == pygame.K_w: 
-                if player_1.on_something: player_1.jump = True #trigger on key release to increase bugs such as double jumping
+        }
         
-        '''keys = pygame.key.get_pressed()
-        if keys[pygame.K_w]:
-            if player_1.on_something: player_1.jump = True'''
+        self.on_something = False
+
+        self.fall_speed = 2
+        self.gravity = 0.5
+    
+        self.x = x; self.y = y
+
+        self.player_offset_rect_x = 37; self.player_offset_rect_y = 20
+    
+        self.rect = pygame.Rect(self.x,self.y, 60,100)
+        self.direction = None #True = Right and False = Left
+
+
+    def move(self):
+        if self.direction == "Right":
+            self.x += self.speed
+            self.rect.x = self.x
+        elif self.direction == "Left": 
+            self.x -= self.speed
+            self.rect.x = self.x
+
+    def jump_function(self):
+
+        if self.jump == True:
+            if self.jump_start_saved == False:
+                self.jump_start = self.y; self.jump_start_saved = True
+    
+            self.y -= self.jump_speed; self.rect.y = self.y
+            if (self.jump_start - self.y) > self.jump_height:
+                self.jump = False; self.jump_start = None; self.jump_start_saved = False
+        
+    def gravity_and_collision(self, platforms):
+        for platform in platforms:
+            if self.rect.colliderect(platform):
+
+                if self.rect.top == 
+
+
+                '''elf.on_something = True
+                self.fall_speed = 0
+                start_falling = False
+                return'''
+
+                
+        if self.jump == False:
+            start_falling = True
+            self.on_something = False
+            self.fall_speed += self.gravity
+            self.y += self.fall_speed; self.rect.y = self.y
+            if self.on_something != True and start_falling != True: self.fall_speed = 2; start_falling = True
+
+    def get_animations(self, animation_name, number_of_frames, animation_sheet, frames_order):
+        if frames_order == "left to right":
+            for frame_number in range(number_of_frames):
+                frame = animation_sheet.subsurface((frame_number*48, 0, 48, 48)); frame = pygame.transform.scale(frame, (144, 144)) 
+                self.animations[animation_name]["frames"].append(frame)
+        elif frames_order == "right to left":
+            width = animation_sheet.get_width()
+            for frame_number in range(number_of_frames):
+                frame = animation_sheet.subsurface((((width -48) -(48*frame_number)), 0, 48, 48));  frame = pygame.transform.scale(frame, (144, 144)) 
+                self.animations[animation_name]["frames"].append(frame)
+
+
+
+    def animation(self, screen):
+        if self.direction == None and self.on_something == True and self.jump == False: #runs 60x per second
+            if self.ms == 60:
+                self.ms = 0
+            if self.ms <= 6:
+                screen.blit(self.animations["idle"]["frames"][0], (self.x-self.player_offset_rect_x, self.y-self.player_offset_rect_y))
+            elif self.ms <= 12:
+                screen.blit(self.animations["idle"]["frames"][1], (self.x-self.player_offset_rect_x, self.y-self.player_offset_rect_y))
+            elif self.ms <= 18:
+                screen.blit(self.animations["idle"]["frames"][2], (self.x-self.player_offset_rect_x, self.y-self.player_offset_rect_y))
+            elif self.ms <= 24:
+                screen.blit(self.animations["idle"]["frames"][3], (self.x-self.player_offset_rect_x, self.y-self.player_offset_rect_y))
+            elif self.ms <= 30:
+                screen.blit(self.animations["idle"]["frames"][4], (self.x-self.player_offset_rect_x, self.y-self.player_offset_rect_y))
+            elif self.ms <= 36:
+                screen.blit(self.animations["idle"]["frames"][5], (self.x-self.player_offset_rect_x, self.y-self.player_offset_rect_y))
+            elif self.ms <= 42:
+                screen.blit(self.animations["idle"]["frames"][6], (self.x-self.player_offset_rect_x, self.y-self.player_offset_rect_y))
+            elif self.ms <= 48:
+                screen.blit(self.animations["idle"]["frames"][7], (self.x-self.player_offset_rect_x, self.y-self.player_offset_rect_y))
+            elif self.ms <= 54:
+                screen.blit(self.animations["idle"]["frames"][8], (self.x-self.player_offset_rect_x, self.y-self.player_offset_rect_y))
+            elif self.ms <= 60:
+                screen.blit(self.animations["idle"]["frames"][9], (self.x-self.player_offset_rect_x, self.y-self.player_offset_rect_y))
+
+            self.ms += 1
             
+'''    def animation(self, screen):
+        if self.direction == None and self.on_something == True: #runs 60x per second
 
+            for frame in self.animation["idle"][frames]:
+                run_per_second = 60 / self.animations["idle"]["frames"]
+                if 
+                screen.blit(self.animations["idle"][frame], (self.x-self.player_offset_rect_x, self.y-self.player_offset_rect_y))
 
-
-        if event.type == pygame.QUIT:
-            pygame.quit()
-            exit()
+                self.ms += 1
+                if self.ms == run_per_second *'''

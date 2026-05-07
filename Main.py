@@ -36,22 +36,28 @@ player_2_idle_spritesheet = pygame.image.load("Assets\Player_Sprites\Player_1\Pl
 
 player_2.get_animations("idle", 10, player_2_idle_spritesheet, "left to right")
 
+
+#####################################################################
+
+floor = platform(SCREEN_WIDTH, 270, 0, 450, (150,75,0))
+grass = platform(SCREEN_WIDTH, SCREEN_HEIGHT - 710, 0, 450, (0,100,0))
+wall_left = platform(20, SCREEN_HEIGHT, 0, 0, (10,10,10))
+
+#TEST PLATFORM#
+platform_1 = platform(200, 20, 0, 320, (0,0,0))
+
+platforms = [floor.rect,grass.rect, wall_left.rect, platform_1.rect]
+
 ###################################################################################
 
 while game == True:
 
     screen.fill((255,255,255))
 
-    #level 1
-
-    floor = platform(SCREEN_WIDTH, SCREEN_HEIGHT, 0, 450, (150,75,0))
-    grass = platform(SCREEN_WIDTH, SCREEN_HEIGHT - 710, 0, 450, (0,100,0))
-#    platform_1 = platform(200, 20, 0, 430, (0,0,0))
-
-    platforms = [floor.rect,grass.rect]
-
     pygame.draw.rect(screen, floor.colour, floor)
     pygame.draw.rect(screen, grass.colour, grass)
+    pygame.draw.rect(screen, wall_left.colour, wall_left)
+    pygame.draw.rect(screen, platform_1.colour, platform_1)
 #    pygame.draw.rect(screen, platform_1.colour, platform_1)
     pygame.draw.rect(screen, (0,0,0), player_1.rect)
     pygame.draw.rect(screen, (0,0,0), player_2.rect)
@@ -60,14 +66,11 @@ while game == True:
     ###################################
  
     player_1.animation(screen)
-    player_1.move()
-    player_1.gravity_and_collision(platforms)
-    player_1.jump_function()
+    player_1.movemenet_collision_gravity(platforms)
 
     player_2.animation(screen)
-    player_2.move()
-    player_2.gravity_and_collision(platforms)
-    player_2.jump_function()
+    player_2.movemenet_collision_gravity(platforms)
+
     ##################################
 
     pygame.display.update()
