@@ -18,7 +18,9 @@ game = True
 
 pygame.init()
 
-player_1 = player(None, 400, 350)
+player_1 = player( 400, 350)
+
+player_2 = player( 500, 350)
 
 
 #screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEEN_HEIGHT), pygame.FULLSCREEN)
@@ -26,9 +28,13 @@ screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
 #    p1 idle animation sheet   #
 
-player_1_idle_spritesheet = pygame.image.load("Assets\Player_Sprites\Player_Idle\Player Idle 48x48.png").convert_alpha()
+player_1_idle_spritesheet = pygame.image.load("Assets\Player_Sprites\Player_1\Player Idle 48x48.png").convert_alpha()
 
 player_1.get_animations("idle", 10, player_1_idle_spritesheet, "left to right")
+
+player_2_idle_spritesheet = pygame.image.load("Assets\Player_Sprites\Player_1\Player Idle 48x48.png").convert_alpha()
+
+player_2.get_animations("idle", 10, player_2_idle_spritesheet, "left to right")
 
 ###################################################################################
 
@@ -48,6 +54,7 @@ while game == True:
     pygame.draw.rect(screen, grass.colour, grass)
 #    pygame.draw.rect(screen, platform_1.colour, platform_1)
     pygame.draw.rect(screen, (0,0,0), player_1.rect)
+    pygame.draw.rect(screen, (0,0,0), player_2.rect)
 #    screen.blit(player_1.animation["idle"][0], (player_1.x-player_1.player_offset_rect_x, player_1.y-player_1.player_offset_rect_y))
 
     ###################################
@@ -56,6 +63,11 @@ while game == True:
     player_1.move()
     player_1.gravity_and_collision(platforms)
     player_1.jump_function()
+
+    player_2.animation(screen)
+    player_2.move()
+    player_2.gravity_and_collision(platforms)
+    player_2.jump_function()
     ##################################
 
     pygame.display.update()
@@ -80,7 +92,17 @@ while game == True:
             if player_1.on_something: player_1.jump = True'''
             
 
-
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_RIGHT: player_2.direction = "Right"
+            if event.key == pygame.K_LEFT: player_2.direction = "Left"
+        if event.type == pygame.KEYUP:
+            if event.key == pygame.K_RIGHT: player_2.direction = None
+            if event.key == pygame.K_LEFT: player_2.direction = None
+            
+            #jump
+        if event.type == pygame.KEYUP:
+            if event.key == pygame.K_UP: 
+                if player_2.on_something: player_2.jump = True
 
         if event.type == pygame.QUIT:
             pygame.quit()

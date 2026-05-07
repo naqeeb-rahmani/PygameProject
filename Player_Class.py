@@ -1,7 +1,7 @@
 import pygame
 
 class player: 
-    def __init__(self, player_sprite, x, y):
+    def __init__(self, x, y):
 
         self.ms = 0 #for animations because each animation runs 60/second
 
@@ -41,8 +41,7 @@ class player:
 
         self.fall_speed = 2
         self.gravity = 0.5
-        
-        self.sprite = player_sprite
+    
         self.x = x; self.y = y
 
         self.player_offset_rect_x = 37; self.player_offset_rect_y = 20
@@ -126,7 +125,7 @@ class player:
 '''    def animation(self, screen):
         if self.direction == None and self.on_something == True: #runs 60x per second
 
-            for frame in self.animation["idle"]:
+            for frame in self.animation["idle"][frames]:
                 run_per_second = 60 / self.animations["idle"]["frames"]
                 if 
                 screen.blit(self.animations["idle"][frame], (self.x-self.player_offset_rect_x, self.y-self.player_offset_rect_y))
