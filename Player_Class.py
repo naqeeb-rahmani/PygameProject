@@ -8,7 +8,7 @@ class player:
         self.speed = 3
 
         self.jump = False
-        self.jump_height = 100
+        self.jump_height = 150
         self.jump_speed = 5
         self.jump_start_saved = False
         self.jump_start = None
@@ -96,7 +96,7 @@ class player:
         for platform in platforms:
             if self.rect.colliderect(platform):
 
-                if self.rect.top >= platform.bottom and self.jump == True:
+                if self.rect.top <= platform.bottom and self.jump == True:
                     self.jump = False
                     self.rect.top = platform.bottom
                     self.y = self.rect.y
