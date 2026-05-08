@@ -1,9 +1,10 @@
-import pygame, sys, random
+import pygame, math, sys, random
 from Player_Class import *
 from Platform_Class import *
 #screen#
 
 SCREEN_WIDTH = 1280
+MAP_WIDTH = 3000
 SCREEN_HEIGHT = 720
 
 clock = pygame.time.Clock()
@@ -39,14 +40,35 @@ player_2.get_animations("idle", 10, player_2_idle_spritesheet, "left to right")
 
 #####################################################################
 
-floor = platform(SCREEN_WIDTH, 270, 0, 450, (150,75,0))
-grass = platform(SCREEN_WIDTH, SCREEN_HEIGHT - 710, 0, 450, (0,100,0))
+floor = platform(MAP_WIDTH, 270, 0, 450, (150,75,0))
+grass = platform(MAP_WIDTH, SCREEN_HEIGHT - 710, 0, 450, (0,100,0))
 wall_left = platform(20, SCREEN_HEIGHT, 0, 0, (10,10,10))
 
 #TEST PLATFORM#
 platform_1 = platform(200, 20, 0, 320, (0,0,0))
 
 platforms = [floor.rect,grass.rect, wall_left.rect, platform_1.rect]
+
+
+#camera#
+
+def camera( player_1, player_2, platforms):
+    if math.sqrt(((player_1.x - player_2.x)**2) + ((player_1.y - player_2.y)**2)) < 1200 and (player_1.x > 1000 or player_2.x > 1000):
+        for platform in platforms:
+            platform.x -= 5
+            if player_2.direction == None:
+                player_2.x -= 5; player_2.rect.x = player_2.x
+            elif player_1.direction == None:
+                player_1.x -= 5; player_1.rect.x = player_1.x
+    if math.sqrt(((player_1.x - player_2.x)**2) + ((player_1.y - player_2.y)**2)) < 1200 and (player_1.x < 200 or player_2.x < 200):
+        for platform in platforms:
+            platform.x += 5
+            if player_2.direction == None:
+                player_2.x += 5; player_2.rect.x = player_2.x
+            elif player_1.direction == None:
+                player_1.x += 5; player_1.rect.x = player_1.x
+            #platform.rect.x = platform.x
+
 
 ###################################################################################
 
@@ -70,6 +92,8 @@ while game == True:
 
     player_2.animation(screen)
     player_2.movemenet_collision_gravity(platforms)
+
+    camera( player_1, player_2, platforms)
 
     ##################################
 

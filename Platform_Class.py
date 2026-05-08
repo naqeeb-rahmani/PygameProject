@@ -1,5 +1,6 @@
 import pygame
 
+
 class platform: 
     def __init__(self, width, height, x, y, colour):
 
@@ -11,6 +12,9 @@ class platform:
 
         self.rect = pygame.Rect(self.x,self.y, self.width,self.height)
 
+
+
     
+            
 
         
