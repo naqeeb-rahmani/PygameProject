@@ -10,6 +10,9 @@ SCREEN_HEIGHT = 720
 clock = pygame.time.Clock()
 ####################
 
+#game name: Not Alone
+#        * But Together
+
 #---------game-variables------------#
 
 game = True
@@ -21,23 +24,72 @@ pygame.init()
 
 player_1 = player( 400, 350)
 
+
 player_2 = player( 500, 350)
+player_2.speed = 6.7
+player_2.jump_height = 167
 
 
 #screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEEN_HEIGHT), pygame.FULLSCREEN)
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
-#    p1 idle animation sheet   #
 
-player_1_idle_spritesheet = pygame.image.load("Assets\Player_Sprites\Player_1\Player Idle 48x48.png").convert_alpha()
+#  saving the animations  #
 
-player_1.get_animations("idle", 10, player_1_idle_spritesheet, "left to right")
+#player_1
 
-player_2_idle_spritesheet = pygame.image.load("Assets\Player_Sprites\Player_1\Player Idle 48x48.png").convert_alpha()
+player_1_idle_spritesheet_right = pygame.image.load("Assets\Player_Sprites\Player_1\PlayerIdleRight 48x48.png").convert_alpha()
+player_1_idle_spritesheet_left = pygame.image.load("Assets\Player_Sprites\Player_1\PlayerIdleLeft 48x48.png").convert_alpha()
 
-player_2.get_animations("idle", 10, player_2_idle_spritesheet, "left to right")
+player_1.get_animations("idle", player_1.animations["idle"]["number of frames"], "right", player_1_idle_spritesheet_right)
+player_1.get_animations("idle", player_1.animations["idle"]["number of frames"], "left", player_1_idle_spritesheet_left)
 
+###
 
+player_1_walk_spritesheet_right = pygame.image.load("Assets\Player_Sprites\Player_1\PlayerIdleRight 48x48.png").convert_alpha()
+player_1_walk_spritesheet_left = pygame.image.load("Assets\Player_Sprites\Player_1\PlayerIdleLeft 48x48.png").convert_alpha()
+
+player_1.get_animations("walk", player_1.animations["walk"]["number of frames"], "right", player_1_walk_spritesheet_right)
+player_1.get_animations("walk", player_1.animations["walk"]["number of frames"], "left", player_1_walk_spritesheet_left)
+
+###
+
+#player_1_jump_spritesheet_right = pygame.image.load("Assets\Player_Sprites\Player_1\PlayerJumpRight 48x48.png").convert_alpha()
+#player_1_jump_spritesheet_left = pygame.image.load("Assets\Player_Sprites\Player_1\PlayerJumpLeft 48x48.png").convert_alpha()
+
+#player_1.get_animations("jump", player_1.animations["jump"]["number of frames"], "right", player_1_jump_spritesheet_right)
+#player_1.get_animations("jump", player_1.animations["jump"]["number of frames"], "left", player_1_jump_spritesheet_left)
+
+#player_2
+player_2_idle_spritesheet_right = pygame.image.load("Assets\Player_Sprites\Player_2\PlayerIdleRight 48x48.png").convert_alpha()
+player_2_idle_spritesheet_left = pygame.image.load("Assets\Player_Sprites\Player_2\PlayerIdleLeft 48x48.png").convert_alpha()
+
+player_2.get_animations("idle", player_1.animations["idle"]["number of frames"], "right", player_2_idle_spritesheet_right)
+player_2.get_animations("idle", player_1.animations["idle"]["number of frames"], "left", player_2_idle_spritesheet_left)
+
+###
+
+player_2_walk_spritesheet_right = pygame.image.load("Assets\Player_Sprites\Player_2\PlayerWalkRight 48x48.png").convert_alpha()
+player_2_walk_spritesheet_left = pygame.image.load("Assets\Player_Sprites\Player_2\PlayerWalkLeft 48x48.png").convert_alpha()
+
+player_2.get_animations("walk", player_1.animations["walk"]["number of frames"], "right", player_2_walk_spritesheet_right)
+player_2.get_animations("walk", player_1.animations["walk"]["number of frames"], "left", player_2_walk_spritesheet_left)
+
+###
+
+player_2_run_spritesheet_right = pygame.image.load("Assets\Player_Sprites\Player_2\PlayerRunRight 48x48.png").convert_alpha()
+player_2_run_spritesheet_left = pygame.image.load("Assets\Player_Sprites\Player_2\PlayerRunLeft 48x48.png").convert_alpha()
+
+player_2.get_animations("run", player_1.animations["run"]["number of frames"], "right", player_2_run_spritesheet_right)
+player_2.get_animations("run", player_1.animations["run"]["number of frames"], "left", player_2_run_spritesheet_left)
+
+###
+
+player_2_jump_spritesheet_right = pygame.image.load("Assets\Player_Sprites\Player_2\PlayerJumpRight 48x48.png").convert_alpha()
+player_2_jump_spritesheet_left = pygame.image.load("Assets\Player_Sprites\Player_2\PlayerJumpLeft 48x48.png").convert_alpha()
+
+player_2.get_animations("jump", player_1.animations["jump"]["number of frames"], "right", player_2_jump_spritesheet_right)
+player_2.get_animations("jump", player_1.animations["jump"]["number of frames"], "left", player_2_jump_spritesheet_left)
 #####################################################################
 
 floor = platform(MAP_WIDTH, 270, 0, 450, (150,75,0))
@@ -52,22 +104,23 @@ platforms = [floor.rect,grass.rect, wall_left.rect, platform_1.rect]
 
 #camera#
 
-def camera( player_1, player_2, platforms):
-    if math.sqrt(((player_1.x - player_2.x)**2) + ((player_1.y - player_2.y)**2)) < 1200 and (player_1.x > 1000 or player_2.x > 1000):
-        for platform in platforms:
-            platform.x -= 5
-            if player_2.direction == None:
-                player_2.x -= 5; player_2.rect.x = player_2.x
-            elif player_1.direction == None:
-                player_1.x -= 5; player_1.rect.x = player_1.x
-    if math.sqrt(((player_1.x - player_2.x)**2) + ((player_1.y - player_2.y)**2)) < 1200 and (player_1.x < 200 or player_2.x < 200):
-        for platform in platforms:
-            platform.x += 5
-            if player_2.direction == None:
-                player_2.x += 5; player_2.rect.x = player_2.x
-            elif player_1.direction == None:
-                player_1.x += 5; player_1.rect.x = player_1.x
-            #platform.rect.x = platform.x
+def camera(player_1, player_2, platforms, SCREEN_WIDTH):
+    middle_xcor = (player_1.x + player_2.x) /2
+
+    deadzone = 50
+
+    if middle_xcor > (((SCREEN_WIDTH)/2) + deadzone):
+        move = -5
+    elif middle_xcor < (((SCREEN_WIDTH)/2) - deadzone ):
+        move = 5
+    else:
+        move = 0
+
+    for platform in platforms:
+        platform.x += move
+  
+    player_1.x += move; player_1.rect.x = player_1.x
+    player_2.x += move; player_2.rect.x = player_2.x
 
 
 ###################################################################################
@@ -93,12 +146,12 @@ while game == True:
     player_2.animation(screen)
     player_2.movemenet_collision_gravity(platforms)
 
-    camera( player_1, player_2, platforms)
+    camera(player_1, player_2, platforms, SCREEN_WIDTH)
 
     ##################################
 
     pygame.display.update()
-    clock.tick(60)
+    clock.tick(120)
     for event in pygame.event.get():
 
 
@@ -106,25 +159,21 @@ while game == True:
             if event.key == pygame.K_d: player_1.direction = "Right"
             if event.key == pygame.K_a: player_1.direction = "Left"
         if event.type == pygame.KEYUP:
-            if event.key == pygame.K_d: player_1.direction = None
-            if event.key == pygame.K_a: player_1.direction = None
+            if event.key == pygame.K_d: player_1.direction = None; player_1.last_direction = "Right"
+            if event.key == pygame.K_a: player_1.direction = None; player_1.last_direction = "Left"
             
             #jump
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_w: 
-                if player_1.on_something: player_1.jump = True #trigger on key release to increase bugs such as double jumping
-        
-        '''keys = pygame.key.get_pressed()
-        if keys[pygame.K_w]:
-            if player_1.on_something: player_1.jump = True'''
-            
+                if player_1.on_something: player_1.jump = True #trigger on key release to decrease bugs such as double jumping
+
 
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_RIGHT: player_2.direction = "Right"
             if event.key == pygame.K_LEFT: player_2.direction = "Left"
         if event.type == pygame.KEYUP:
-            if event.key == pygame.K_RIGHT: player_2.direction = None
-            if event.key == pygame.K_LEFT: player_2.direction = None
+            if event.key == pygame.K_RIGHT: player_2.direction = None; player_2.last_direction = "Right"
+            if event.key == pygame.K_LEFT: player_2.direction = None; player_2.last_direction = "Left"
             
             #jump
         if event.type == pygame.KEYUP:
