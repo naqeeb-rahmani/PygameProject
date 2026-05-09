@@ -22,17 +22,17 @@ game = True
 
 pygame.init()
 
-player_1 = player( 400, 350)
+player_1 = player("player_1", 400, 350)
 
 
-player_2 = player( 500, 350)
+player_2 = player("player_2", 500, 350)
 player_2.speed = 6.7
-player_2.jump_height = 167
+player_2.jump_height = 180
 
 
 #screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEEN_HEIGHT), pygame.FULLSCREEN)
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-
+pygame.display.set_caption("Not Alone")
 
 #  saving the animations  #
 
@@ -46,36 +46,33 @@ player_1.get_animations("idle", player_1.animations["idle"]["number of frames"],
 
 ###
 
-player_1_walk_spritesheet_right = pygame.image.load("Assets\Player_Sprites\Player_1\PlayerIdleRight 48x48.png").convert_alpha()
-player_1_walk_spritesheet_left = pygame.image.load("Assets\Player_Sprites\Player_1\PlayerIdleLeft 48x48.png").convert_alpha()
+player_1_walk_spritesheet_right = pygame.image.load("Assets\Player_Sprites\Player_1\PlayerWalkRight 48x48.png").convert_alpha()
+player_1_walk_spritesheet_left = pygame.image.load("Assets\Player_Sprites\Player_1\PlayerWalkLeft 48x48.png").convert_alpha()
 
 player_1.get_animations("walk", player_1.animations["walk"]["number of frames"], "right", player_1_walk_spritesheet_right)
 player_1.get_animations("walk", player_1.animations["walk"]["number of frames"], "left", player_1_walk_spritesheet_left)
 
 ###
 
-#player_1_jump_spritesheet_right = pygame.image.load("Assets\Player_Sprites\Player_1\PlayerJumpRight 48x48.png").convert_alpha()
-#player_1_jump_spritesheet_left = pygame.image.load("Assets\Player_Sprites\Player_1\PlayerJumpLeft 48x48.png").convert_alpha()
+player_1_land_spritesheet_right = pygame.image.load("Assets\Player_Sprites\Player_1\PlayerLandRight 48x48.png").convert_alpha()
+player_1_land_spritesheet_left = pygame.image.load("Assets\Player_Sprites\Player_1\PlayerLandLeft 48x48.png").convert_alpha()
 
-#player_1.get_animations("jump", player_1.animations["jump"]["number of frames"], "right", player_1_jump_spritesheet_right)
-#player_1.get_animations("jump", player_1.animations["jump"]["number of frames"], "left", player_1_jump_spritesheet_left)
+player_1.get_animations("land", player_1.animations["land"]["number of frames"], "right", player_1_land_spritesheet_right)
+player_1.get_animations("land", player_1.animations["land"]["number of frames"], "left", player_1_land_spritesheet_left)
 
-#player_2
+player_1_jump_spritesheet_right = pygame.image.load("Assets\Player_Sprites\Player_1\PlayerJumpRight 48x48.png").convert_alpha()
+player_1_jump_spritesheet_left = pygame.image.load("Assets\Player_Sprites\Player_1\PlayerJumpLeft 48x48.png").convert_alpha()
+
+player_1.get_animations("jump", player_1.animations["jump"]["number of frames"], "right", player_1_jump_spritesheet_right)
+player_1.get_animations("jump", player_1.animations["jump"]["number of frames"], "left", player_1_jump_spritesheet_left)
+
+#player_2#
 player_2_idle_spritesheet_right = pygame.image.load("Assets\Player_Sprites\Player_2\PlayerIdleRight 48x48.png").convert_alpha()
 player_2_idle_spritesheet_left = pygame.image.load("Assets\Player_Sprites\Player_2\PlayerIdleLeft 48x48.png").convert_alpha()
 
 player_2.get_animations("idle", player_1.animations["idle"]["number of frames"], "right", player_2_idle_spritesheet_right)
 player_2.get_animations("idle", player_1.animations["idle"]["number of frames"], "left", player_2_idle_spritesheet_left)
 
-###
-
-player_2_walk_spritesheet_right = pygame.image.load("Assets\Player_Sprites\Player_2\PlayerWalkRight 48x48.png").convert_alpha()
-player_2_walk_spritesheet_left = pygame.image.load("Assets\Player_Sprites\Player_2\PlayerWalkLeft 48x48.png").convert_alpha()
-
-player_2.get_animations("walk", player_1.animations["walk"]["number of frames"], "right", player_2_walk_spritesheet_right)
-player_2.get_animations("walk", player_1.animations["walk"]["number of frames"], "left", player_2_walk_spritesheet_left)
-
-###
 
 player_2_run_spritesheet_right = pygame.image.load("Assets\Player_Sprites\Player_2\PlayerRunRight 48x48.png").convert_alpha()
 player_2_run_spritesheet_left = pygame.image.load("Assets\Player_Sprites\Player_2\PlayerRunLeft 48x48.png").convert_alpha()
@@ -88,18 +85,29 @@ player_2.get_animations("run", player_1.animations["run"]["number of frames"], "
 player_2_jump_spritesheet_right = pygame.image.load("Assets\Player_Sprites\Player_2\PlayerJumpRight 48x48.png").convert_alpha()
 player_2_jump_spritesheet_left = pygame.image.load("Assets\Player_Sprites\Player_2\PlayerJumpLeft 48x48.png").convert_alpha()
 
-player_2.get_animations("jump", player_1.animations["jump"]["number of frames"], "right", player_2_jump_spritesheet_right)
-player_2.get_animations("jump", player_1.animations["jump"]["number of frames"], "left", player_2_jump_spritesheet_left)
+player_2.get_animations("jump", player_2.animations["jump"]["number of frames"], "right", player_2_jump_spritesheet_right)
+player_2.get_animations("jump", player_2.animations["jump"]["number of frames"], "left", player_2_jump_spritesheet_left)
+
+player_2_land_spritesheet_right = pygame.image.load("Assets\Player_Sprites\Player_2\PlayerLandRight 48x48.png").convert_alpha()
+player_2_land_spritesheet_left = pygame.image.load("Assets\Player_Sprites\Player_2\PlayerLandLeft 48x48.png").convert_alpha()
+
+player_2.get_animations("land", player_2.animations["land"]["number of frames"], "right", player_2_land_spritesheet_right)
+player_2.get_animations("land", player_2.animations["land"]["number of frames"], "left", player_2_land_spritesheet_left)
+
 #####################################################################
 
 floor = platform(MAP_WIDTH, 270, 0, 450, (150,75,0))
 grass = platform(MAP_WIDTH, SCREEN_HEIGHT - 710, 0, 450, (0,100,0))
-wall_left = platform(20, SCREEN_HEIGHT, 0, 0, (10,10,10))
+
+wall_left = platform(20, SCREEN_HEIGHT + 100, 0, -100, (10,10,10))
 
 #TEST PLATFORM#
 platform_1 = platform(200, 20, 0, 320, (0,0,0))
 
-platforms = [floor.rect,grass.rect, wall_left.rect, platform_1.rect]
+platform_2 = platform(300, 22.5, 340, 150, (0,0,0))
+
+platforms = [floor.rect,grass.rect, wall_left.rect, platform_1.rect, platform_2.rect]
+
 
 
 #camera#
@@ -133,15 +141,17 @@ while game == True:
     pygame.draw.rect(screen, grass.colour, grass)
     pygame.draw.rect(screen, wall_left.colour, wall_left)
     pygame.draw.rect(screen, platform_1.colour, platform_1)
-#    pygame.draw.rect(screen, platform_1.colour, platform_1)
-    pygame.draw.rect(screen, (0,0,0), player_1.rect)
-    pygame.draw.rect(screen, (0,0,0), player_2.rect)
-#    screen.blit(player_1.animation["idle"][0], (player_1.x-player_1.player_offset_rect_x, player_1.y-player_1.player_offset_rect_y))
+    pygame.draw.rect(screen, platform_2.colour, platform_2)
+
+    #pygame.draw.rect(screen, (0,0,0), player_1.rect)
+    #pygame.draw.rect(screen, (0,0,0), player_2.rect)
+
 
     ###################################
  
-    player_1.animation(screen)
+    #player_1.animation(screen)
     player_1.movemenet_collision_gravity(platforms)
+    player_1.animation(screen)
 
     player_2.animation(screen)
     player_2.movemenet_collision_gravity(platforms)

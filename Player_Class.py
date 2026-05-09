@@ -1,9 +1,11 @@
 import pygame
 
 class player: 
-    def __init__(self, x, y):
+    def __init__(self, name, x, y):
 
-        self.ms = 0 #for animations because each animation runs 60/second
+        self.ms = 0 #for animations because each function runs 120/second and the animations between 6-10 incl. 6 and 10
+
+        self.name = name
 
         self.speed = 5
 
@@ -41,16 +43,31 @@ class player:
                 "number of frames": 8
             },
 
-            "jump": {
+            "jump" : {
                 "frames": {
                     "right" : [],
                     "left" : []
                 },
                 "number of frames": 6
+            },
+            
+            "land" : {
+                "frames" : {
+                    "right" : [],
+                    "left" : []
+                },
+                "number of frames": 9
             }
 
         }
-        
+
+
+        self.current_anim = None
+        self.last_anim = None
+        self.current_frame_number = 0
+        self.change_anim_after_ms = 0
+
+
         self.on_something = False
 
         self.fall_speed = 2
@@ -140,57 +157,79 @@ class player:
 
 
     def animation(self, screen):
-        if self.direction == None: direction = self.last_direction.lower()
-        else: direction = self.direction.lower()
-
-        if self.direction == None and self.on_something == True and self.jump == False: #runs 60x per second
-            if self.ms <= 12:
-                screen.blit(self.animations["idle"]["frames"][direction][0], (self.x-self.player_offset_rect_x, self.y-self.player_offset_rect_y))
-            elif self.ms <= 24:
-                screen.blit(self.animations["idle"]["frames"][direction][1], (self.x-self.player_offset_rect_x, self.y-self.player_offset_rect_y))
-            elif self.ms <= 36:
-                screen.blit(self.animations["idle"]["frames"][direction][2], (self.x-self.player_offset_rect_x, self.y-self.player_offset_rect_y))
-            elif self.ms <= 48:
-                screen.blit(self.animations["idle"]["frames"][direction][3], (self.x-self.player_offset_rect_x, self.y-self.player_offset_rect_y))
-            elif self.ms <= 60:
-                screen.blit(self.animations["idle"]["frames"][direction][4], (self.x-self.player_offset_rect_x, self.y-self.player_offset_rect_y))
-            elif self.ms <= 72:
-                screen.blit(self.animations["idle"]["frames"][direction][5], (self.x-self.player_offset_rect_x, self.y-self.player_offset_rect_y))
-            elif self.ms <= 84:
-                screen.blit(self.animations["idle"]["frames"][direction][6], (self.x-self.player_offset_rect_x, self.y-self.player_offset_rect_y))
-            elif self.ms <= 96:
-                screen.blit(self.animations["idle"]["frames"][direction][7], (self.x-self.player_offset_rect_x, self.y-self.player_offset_rect_y))
-            elif self.ms <= 108:
-                screen.blit(self.animations["idle"]["frames"][direction][8], (self.x-self.player_offset_rect_x, self.y-self.player_offset_rect_y))
-            elif self.ms <= 120:
-                screen.blit(self.animations["idle"]["frames"][direction][9], (self.x-self.player_offset_rect_x, self.y-self.player_offset_rect_y))
-        
-        elif self.direction != None and self.on_something == True:
-            if self.ms <= 15:
-                screen.blit(self.animations["run"]["frames"][direction][0], (self.x-self.player_offset_rect_x, self.y-self.player_offset_rect_y))
-            elif self.ms <= 30:
-                screen.blit(self.animations["run"]["frames"][direction][1], (self.x-self.player_offset_rect_x, self.y-self.player_offset_rect_y))
-            elif self.ms <= 45:
-                screen.blit(self.animations["run"]["frames"][direction][2], (self.x-self.player_offset_rect_x, self.y-self.player_offset_rect_y))
-            elif self.ms <= 60:
-                screen.blit(self.animations["run"]["frames"][direction][3], (self.x-self.player_offset_rect_x, self.y-self.player_offset_rect_y))
-            elif self.ms <= 75:
-                screen.blit(self.animations["run"]["frames"][direction][4], (self.x-self.player_offset_rect_x, self.y-self.player_offset_rect_y))
-            elif self.ms <= 90:
-                screen.blit(self.animations["run"]["frames"][direction][5], (self.x-self.player_offset_rect_x, self.y-self.player_offset_rect_y))
-            elif self.ms <= 105:
-                screen.blit(self.animations["run"]["frames"][direction][6], (self.x-self.player_offset_rect_x, self.y-self.player_offset_rect_y))
-            elif self.ms <= 120:
-                screen.blit(self.animations["run"]["frames"][direction][7], (self.x-self.player_offset_rect_x, self.y-self.player_offset_rect_y))
-        
-           
-            if self.ms == 120:
-                self.ms = 0
-            self.ms += 1
-
-    def animation(self, screen):
             if self.direction == None: direction = self.last_direction.lower()
             else: direction = self.direction.lower()
+
+
+            if self.direction == None and self.on_something == True and self.jump == False: #runs 120x per second
+                self.change_anim_after_ms = 120 // self.animations["idle"]["number of frames"]
+
+                if self.current_anim != "idle":
+                    self.current_frame_number = 0
+                self.current_anim = "idle"
+
+            #####   
+                
+            elif self.direction != None and self.on_something == True:
+
+                self.change_anim_after_ms = 120 // self.animations["walk"]["number of frames"]
+
+                if self.name == "player_1":
+
+                    if self.current_anim != "walk":
+                        self.current_frame_number = 0
+                    self.current_anim = "walk"
+                
+                elif self.name == "player_2":
+
+                    if self.current_anim != "run":
+                        self.current_frame_number = 0
+                    self.current_anim = "run"
+
+                if self.current_frame_number > self.animations["walk"]["number of frames"]:
+                    self.current_frame_number = 0
+
+            #####
+
+            elif self.jump == True:
+                self.change_anim_after_ms = 120 // self.animations["jump"]["number of frames"]
+
+                if self.current_anim != "jump":
+                    self.current_frame_number = 0
+                self.current_anim = "jump"
+
+            if self.current_frame_number > self.animations["jump"]["number of frames"]:
+                    self.current_frame_number = 0
+
+
+            elif self.jump != True and self.on_something != True:
+                self.change_anim_after_ms = 120 // self.animations["land"]["number of frames"]
+
+                if self.current_anim != "land":
+                    self.current_frame_number = 0
+                self.current_anim = "land"
+
+            if self.current_frame_number > self.animations["land"]["number of frames"]:
+                    self.current_frame_number = 0
+
+
+            #####
+
+
+            #elif self.on_something == False:
+            #    return
+            
+            screen.blit(self.animations[self.current_anim]["frames"][direction][self.current_frame_number], (self.x-self.player_offset_rect_x, self.y-self.player_offset_rect_y))
+
+            if self.ms >= self.change_anim_after_ms:
+                self.current_frame_number += 1
+                self.ms = 0
+            else:
+                self.ms += 1
+
+            if self.current_frame_number >= self.animations[self.current_anim]["number of frames"]:
+                self.current_frame_number = 0
+
             
 
 
