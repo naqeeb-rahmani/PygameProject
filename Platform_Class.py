@@ -6,6 +6,8 @@ class platform:
 
         self.width = width; self.height = height
 
+        self.start_position_y = y
+
         self.x = x; self.y = y
 
         self.colour = colour

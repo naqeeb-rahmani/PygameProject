@@ -1,6 +1,8 @@
 import pygame, math, sys, random
 from Player_Class import *
 from Platform_Class import *
+from Pressure_Plates_Class import *
+from Lever_Class import *
 #screen#
 
 SCREEN_WIDTH = 1280
@@ -96,18 +98,63 @@ player_2.get_animations("land", player_2.animations["land"]["number of frames"],
 
 #####################################################################
 
+
+###########
+
+lever_off_sprite = pygame.image.load("Assets\Map\Lever\LeverOff.png").convert_alpha()
+lever_on_sprite = pygame.image.load("Assets\Map\Lever\LeverOn.png").convert_alpha()
+
+lever_1 = lever()
+
+####map####
+
 floor = platform(MAP_WIDTH, 270, 0, 450, (150,75,0))
 grass = platform(MAP_WIDTH, SCREEN_HEIGHT - 710, 0, 450, (0,100,0))
 
 wall_left = platform(20, SCREEN_HEIGHT + 100, 0, -100, (10,10,10))
 
-#TEST PLATFORM#
+
 platform_1 = platform(200, 20, 0, 320, (0,0,0))
 
 platform_2 = platform(300, 22.5, 340, 150, (0,0,0))
 
-platforms = [floor.rect,grass.rect, wall_left.rect, platform_1.rect, platform_2.rect]
+platform_2_plate = pressure_plate(400, 140)
 
+wall_under_platform_2 = platform(20, 300, 620, 150, (0,0,0))
+wall_above_platform_2 = platform(20, 300, 620, -150, (0,0,0))
+
+platforms = [floor.rect, grass.rect, wall_left.rect, platform_1.rect, platform_2.rect, platform_2_plate.rect ,wall_under_platform_2.rect, wall_above_platform_2.rect]
+
+pressure_plates = [platform_2_plate]
+
+non_collideable_objects = []
+
+#######
+
+#pressure plate activation#
+
+def update_pressure_plates():
+    for pressure_plate in pressure_plates:
+        if ((player_1.rect.bottom == pressure_plate.rect.top) and (player_1.on_something == True)) or ((player_2.rect.bottom == pressure_plate.rect.top) and (player_2.on_something == True)):
+            pressure_plate.activated = True; pressure_plate.colour = (0,0,255)
+        else:
+            pressure_plate.activated = False; pressure_plate.colour = (255,0,0)
+
+        if pressure_plate.activated == True:
+            if (pressure_plate.y - pressure_plate.y_unactivated) < 8:
+                pressure_plate.y += 0.5; pressure_plate.rect.y = pressure_plate.y
+            
+        else:
+            if (pressure_plate.y - pressure_plate.y_unactivated) > 0:
+                pressure_plate.y -= 0.5; pressure_plate.rect.y = pressure_plate.y
+
+def pressure_plate_and_lever():
+    if platform_2_plate.activated == True:
+        if (wall_under_platform_2.start_position_y - wall_under_platform_2.y) < 150:
+            wall_under_platform_2.y -= 5; wall_under_platform_2.rect.y = wall_under_platform_2.y
+    else:
+        if (wall_under_platform_2.start_position_y - wall_under_platform_2.y) > 0:
+            wall_under_platform_2.y += 5; wall_under_platform_2.rect.y = wall_under_platform_2.y
 
 
 #camera#
@@ -141,7 +188,14 @@ while game == True:
     pygame.draw.rect(screen, grass.colour, grass)
     pygame.draw.rect(screen, wall_left.colour, wall_left)
     pygame.draw.rect(screen, platform_1.colour, platform_1)
+
+    pygame.draw.rect(screen, platform_2_plate.colour, platform_2_plate.rect)
     pygame.draw.rect(screen, platform_2.colour, platform_2)
+
+    pygame.draw.rect(screen, wall_under_platform_2.colour, wall_under_platform_2)
+    pygame.draw.rect(screen, wall_above_platform_2.colour, wall_above_platform_2)
+
+    lever_on_sprite = pygame.transform.scale(lever_on_sprite, (50, 50))
 
     #pygame.draw.rect(screen, (0,0,0), player_1.rect)
     #pygame.draw.rect(screen, (0,0,0), player_2.rect)
@@ -155,6 +209,11 @@ while game == True:
 
     player_2.animation(screen)
     player_2.movemenet_collision_gravity(platforms)
+
+    update_pressure_plates()
+    pressure_plate_and_lever()
+
+    print(platform_2_plate.activated)
 
     camera(player_1, player_2, platforms, SCREEN_WIDTH)
 
