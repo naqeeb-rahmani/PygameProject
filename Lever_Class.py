@@ -1,7 +1,7 @@
 import pygame
 
 class lever:
-    def __init__(self, x, y, sprite_off, sprite_on, name):
+    def __init__(self, x, y, sprite_off, sprite_on, name, T_or_F):
 
         self.name = name
 
@@ -9,9 +9,13 @@ class lever:
         self.y = y
 
         self.on = False
+
+        self.button_pressed = False # to avoid fast toggling 
         
         self.sprite_off = sprite_off
         self.sprite_on = sprite_on
+
+        lever.toggleable = T_or_F #if True - the lever is slightly smaller and can be left toggled. If False - the lever is slightly bigger and can not be left toggled.
 
         self.sprite = sprite_off
 

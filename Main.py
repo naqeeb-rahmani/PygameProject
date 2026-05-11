@@ -104,33 +104,23 @@ player_2.get_animations("land", player_2.animations["land"]["number of frames"],
 #levers#
 
 lever_off_sprite = pygame.image.load("Assets\Map\Lever\LeverOff.png").convert_alpha()
-
-lever_off_sprite = pygame.transform.scale(lever_off_sprite, (50, 55))
-
 lever_on_sprite = pygame.image.load("Assets\Map\Lever\LeverOn.png").convert_alpha()
-lever_on_sprite = pygame.transform.scale(lever_on_sprite, (50, 55))
 
-lever_1 = lever(750, 395, lever_off_sprite, lever_on_sprite,"level_1")
+small_lever_off_sprite = pygame.transform.scale(lever_off_sprite, (50, 55))
+small_lever_on_sprite = pygame.transform.scale(lever_on_sprite, (50, 55))
+
+big_lever_off_sprite = pygame.transform.scale(lever_off_sprite, (60, 65))
+big_lever_on_sprite = pygame.transform.scale(lever_on_sprite, (60, 65))
+
+
+
+lever_1 = lever(750, 395, small_lever_off_sprite, small_lever_on_sprite,"level_1", True)
+
+
 
 levers = [lever_1]
 
 #update lever#
-
-def update_levers(levers):
-    for lever in levers:
-        if player_1.rect.colliderect(lever.rect):
-
-            for event in pygame.event.get():
-
-                if event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_e:
-                        lever.on = True
-                            
-                if event.type == pygame.KEYUP:
-                    if event.key == pygame.K_e: 
-                        lever.on = False
-
-            lever.update_lever_sprite_based_on_state()
 
 ####map####
 
@@ -225,8 +215,6 @@ while game == True:
 
     pygame.draw.rect(screen, (0,0,0), lever_1.rect)
 
-    update_levers(levers)
-
     screen.blit(lever_1.sprite, (lever_1.x, lever_1.y))
 
     #pygame.draw.rect(screen, (0,0,0), player_1.rect)
@@ -256,18 +244,54 @@ while game == True:
 
 
         if event.type == pygame.KEYDOWN:
+            #move#
             if event.key == pygame.K_d: player_1.direction = "Right"
             if event.key == pygame.K_a: player_1.direction = "Left"
+
+            #interact#
+            if event.key == pygame.K_e:
+                for lever in levers:
+                    if player_1.rect.colliderect(lever.rect):
+                        if lever.toggleable == True:
+                            if lever.button_pressed == False:
+                                if lever.on != True:
+                                    lever.on = True
+                                elif lever.on == True:
+                                    lever.on = False
+                                lever.button_pressed = True
+                        elif lever.toggleable != True:
+                            lever.on = True
+                        
+                        lever.update_lever_sprite_based_on_state()
+
         if event.type == pygame.KEYUP:
+            #move
             if event.key == pygame.K_d: player_1.direction = None; player_1.last_direction = "Right"
             if event.key == pygame.K_a: player_1.direction = None; player_1.last_direction = "Left"
+
+            #interact#
+            if event.key == pygame.K_e:
+                for lever in levers:
+                    if player_1.rect.colliderect(lever.rect):
+                        if lever.toggleable == True:
+                            lever.button_pressed = False
+
+                        elif lever.toggleable != True:
+                            if lever.on == True:
+                                lever.on = False
+                            
+                            lever.update_lever_sprite_based_on_state()
+    
+                            
+            
             
             #jump
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_w: 
                 if player_1.on_something: player_1.jump = True #trigger on key release to decrease bugs such as double jumping
 
-        ### interact ###
+
+
 
         #if event.type == pygame.KEYDOWN:
 
