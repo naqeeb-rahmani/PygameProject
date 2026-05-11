@@ -11,5 +11,5 @@ class pressure_plate:
 
         self.colour = (255,0,0)
 
-        self.rect = pygame.Rect(x, y, 50, 10)
+        self.rect = pygame.Rect(x, y, 40, 10)
     

@@ -31,6 +31,8 @@ player_2 = player("player_2", 500, 350)
 player_2.speed = 6.7
 player_2.jump_height = 180
 
+#p1_interact_button - E 
+
 
 #screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEEN_HEIGHT), pygame.FULLSCREEN)
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
@@ -99,12 +101,36 @@ player_2.get_animations("land", player_2.animations["land"]["number of frames"],
 #####################################################################
 
 
-###########
+#levers#
 
 lever_off_sprite = pygame.image.load("Assets\Map\Lever\LeverOff.png").convert_alpha()
-lever_on_sprite = pygame.image.load("Assets\Map\Lever\LeverOn.png").convert_alpha()
 
-lever_1 = lever()
+lever_off_sprite = pygame.transform.scale(lever_off_sprite, (50, 55))
+
+lever_on_sprite = pygame.image.load("Assets\Map\Lever\LeverOn.png").convert_alpha()
+lever_on_sprite = pygame.transform.scale(lever_on_sprite, (50, 55))
+
+lever_1 = lever(750, 395, lever_off_sprite, lever_on_sprite,"level_1")
+
+levers = [lever_1]
+
+#update lever#
+
+def update_levers(levers):
+    for lever in levers:
+        if player_1.rect.colliderect(lever.rect):
+
+            for event in pygame.event.get():
+
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_e:
+                        lever.on = True
+                            
+                if event.type == pygame.KEYUP:
+                    if event.key == pygame.K_e: 
+                        lever.on = False
+
+            lever.update_lever_sprite_based_on_state()
 
 ####map####
 
@@ -127,7 +153,7 @@ platforms = [floor.rect, grass.rect, wall_left.rect, platform_1.rect, platform_2
 
 pressure_plates = [platform_2_plate]
 
-non_collideable_objects = []
+non_collideable_objects = [lever_1]
 
 #######
 
@@ -173,6 +199,8 @@ def camera(player_1, player_2, platforms, SCREEN_WIDTH):
 
     for platform in platforms:
         platform.x += move
+    for object in non_collideable_objects:
+        object.x += move; object.rect.x = object.x
   
     player_1.x += move; player_1.rect.x = player_1.x
     player_2.x += move; player_2.rect.x = player_2.x
@@ -195,7 +223,11 @@ while game == True:
     pygame.draw.rect(screen, wall_under_platform_2.colour, wall_under_platform_2)
     pygame.draw.rect(screen, wall_above_platform_2.colour, wall_above_platform_2)
 
-    lever_on_sprite = pygame.transform.scale(lever_on_sprite, (50, 50))
+    pygame.draw.rect(screen, (0,0,0), lever_1.rect)
+
+    update_levers(levers)
+
+    screen.blit(lever_1.sprite, (lever_1.x, lever_1.y))
 
     #pygame.draw.rect(screen, (0,0,0), player_1.rect)
     #pygame.draw.rect(screen, (0,0,0), player_2.rect)
@@ -211,9 +243,8 @@ while game == True:
     player_2.movemenet_collision_gravity(platforms)
 
     update_pressure_plates()
-    pressure_plate_and_lever()
 
-    print(platform_2_plate.activated)
+    pressure_plate_and_lever()
 
     camera(player_1, player_2, platforms, SCREEN_WIDTH)
 
@@ -235,6 +266,11 @@ while game == True:
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_w: 
                 if player_1.on_something: player_1.jump = True #trigger on key release to decrease bugs such as double jumping
+
+        ### interact ###
+
+        #if event.type == pygame.KEYDOWN:
+
 
 
         if event.type == pygame.KEYDOWN:
