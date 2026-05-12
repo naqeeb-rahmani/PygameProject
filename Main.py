@@ -1,8 +1,9 @@
-import pygame, math, sys, random
+import pygame
 from Player_Class import *
 from Platform_Class import *
 from Pressure_Plates_Class import *
 from Lever_Class import *
+from Coin_Class import *
 #screen#
 
 SCREEN_WIDTH = 1280
@@ -24,14 +25,15 @@ game = True
 
 pygame.init()
 
-player_1 = player("player_1", 400, 350)
+player_1 = player("player_1", 400, 350, False)
 
 
-player_2 = player("player_2", 500, 350)
+player_2 = player("player_2", 500, 350, True)
 player_2.speed = 6.7
 player_2.jump_height = 180
 
-#p1_interact_button - E 
+#p1_interact_button = E 
+#p2_interact_button = RETURN 
 
 
 #screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEEN_HEIGHT), pygame.FULLSCREEN)
@@ -120,7 +122,23 @@ lever_1 = lever(750, 395, small_lever_off_sprite, small_lever_on_sprite,"level_1
 
 levers = [lever_1]
 
-#update lever#
+###coins###
+
+coin_spritesheet = pygame.image.load("Assets\Map\Coin\Coin 16x16.png")
+
+coin_1 = coin(500, 100, pygame.transform.scale(coin_spritesheet.subsurface(0,0,16,16), (50,50)))
+coin_1.get_coin_animation(coin_spritesheet, 14)
+
+coins = [coin_1]
+
+total_coins = "dont know yet"
+
+#to display number of coins#
+
+display_number_of_coins_font = pygame.font.Font("Assets\Font\Grand9K Pixel.ttf", 20)
+
+display_number_of_coins = display_number_of_coins_font.render(f"Coin: {player_2.coins_collected} / {total_coins}", True, (0,0,0))
+
 
 ####map####
 
@@ -143,7 +161,7 @@ platforms = [floor.rect, grass.rect, wall_left.rect, platform_1.rect, platform_2
 
 pressure_plates = [platform_2_plate]
 
-non_collideable_objects = [lever_1]
+non_collideable_objects = [lever_1, coin_1]
 
 #######
 
@@ -217,8 +235,16 @@ while game == True:
 
     screen.blit(lever_1.sprite, (lever_1.x, lever_1.y))
 
-    #pygame.draw.rect(screen, (0,0,0), player_1.rect)
-    #pygame.draw.rect(screen, (0,0,0), player_2.rect)
+    for coin in coins:
+        pygame.draw.rect(screen, (255,0,0), coin.rect)
+
+        coin.animate(screen)
+        
+    player_2.collect_coins(coins)
+
+    display_number_of_coins = display_number_of_coins_font.render(f"Coins: {player_2.coins_collected} / {total_coins}", True, (0,0,0))
+    screen.blit(display_number_of_coins, (5, 650))
+
 
 
     ###################################

@@ -234,6 +234,15 @@ class player:
             if self.current_frame_number >= self.animations[self.current_anim]["number of frames"]:
                 self.current_frame_number = 0
 
+
+
+
+    def collect_coins(self,coins):
+        if self.can_collect_coins == True:
+            for coin in coins:
+                if self.rect.colliderect(coin.rect):
+                    self.coins_collected += 1
+                    coins.remove(coin)
             
 
 
