@@ -80,9 +80,9 @@ class player:
     
         self.x = x; self.y = y
 
-        self.player_offset_rect_x = 37; self.player_offset_rect_y = 20
+        self.player_offset_rect_x = 43; self.player_offset_rect_y = 30
     
-        self.rect = pygame.Rect(self.x,self.y, 60,100)
+        self.rect = pygame.Rect(self.x,self.y, 55,90)
 
         self.direction = None #True = Right and False = Left
         self.last_direction = "right"
@@ -135,7 +135,7 @@ class player:
                     self.jump = False
                     self.rect.top = platform.bottom
                     self.y = self.rect.y
-                    self.jump = False
+                    self.jump = False; self.jump_start = None; self.jump_start_saved = False; self.fall_speed = 0
 
                 elif self.rect.bottom >= platform.top and self.fall_speed > 0:
                     self.on_something = True    

@@ -15,7 +15,7 @@ class lever:
         self.sprite_off = sprite_off
         self.sprite_on = sprite_on
 
-        lever.toggleable = T_or_F #if True - the lever is slightly smaller and can be left toggled. If False - the lever is slightly bigger and can not be left toggled.
+        self.toggleable = T_or_F #if True - the lever is slightly smaller and can be left toggled. If False - the lever is slightly bigger and can not be left toggled.
 
         self.sprite = sprite_off
 

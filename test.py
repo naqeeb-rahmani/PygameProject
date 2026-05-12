@@ -1,8 +1,9 @@
-import pygame, math, sys, random
+import pygame
 from Player_Class import *
 from Platform_Class import *
 from Pressure_Plates_Class import *
 from Lever_Class import *
+from Coin_Class import *
 #screen#
 
 SCREEN_WIDTH = 1280
@@ -24,14 +25,15 @@ game = True
 
 pygame.init()
 
-player_1 = player("player_1", 400, 350)
+player_1 = player("player_1", 400, 350, False)
 
 
-player_2 = player("player_2", 500, 350)
+player_2 = player("player_2", 500, 350, True)
 player_2.speed = 6.7
-player_2.jump_height = 180
+player_2.jump_height = 170
 
-#p1_interact_button - E 
+#p1_interact_button = E 
+#p2_interact_button = RETURN 
 
 
 #screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEEN_HEIGHT), pygame.FULLSCREEN)
@@ -112,23 +114,31 @@ small_lever_on_sprite = pygame.transform.scale(lever_on_sprite, (50, 55))
 big_lever_off_sprite = pygame.transform.scale(lever_off_sprite, (60, 65))
 big_lever_on_sprite = pygame.transform.scale(lever_on_sprite, (60, 65))
 
+###coins###
+
+coin_spritesheet = pygame.image.load("Assets\Map\Coin\Coin 16x16.png")
+
+#################
 
 
-lever_1 = lever(750, 395, small_lever_off_sprite, small_lever_on_sprite,"level_1", True)
+total_coins = "dont know yet"
 
+#to display number of coins#
 
+display_number_of_coins_font = pygame.font.Font("Assets\Font\Grand9K Pixel.ttf", 20)
 
-levers = [lever_1]
+display_number_of_coins = display_number_of_coins_font.render(f"Coin: {player_2.coins_collected} / {total_coins}", True, (0,0,0))
 
-#update lever#
 
 ####map####
 
 floor = platform(MAP_WIDTH, 270, 0, 450, (150,75,0))
 grass = platform(MAP_WIDTH, SCREEN_HEIGHT - 710, 0, 450, (0,100,0))
+roof = platform(MAP_WIDTH, 5, 0,0, (0,0,0))
 
 wall_left = platform(20, SCREEN_HEIGHT + 100, 0, -100, (10,10,10))
 
+###############3
 
 platform_1 = platform(200, 20, 0, 320, (0,0,0))
 
@@ -136,14 +146,41 @@ platform_2 = platform(300, 22.5, 340, 150, (0,0,0))
 
 platform_2_plate = pressure_plate(400, 140)
 
-wall_under_platform_2 = platform(20, 300, 620, 150, (0,0,0))
-wall_above_platform_2 = platform(20, 300, 620, -150, (0,0,0))
+#coin_1 = coin(500, 100, pygame.transform.scale(coin_spritesheet.subsurface(0,0,16,16), (50,50)))
+#coin_1.get_coin_animation(coin_spritesheet, 14)
 
-platforms = [floor.rect, grass.rect, wall_left.rect, platform_1.rect, platform_2.rect, platform_2_plate.rect ,wall_under_platform_2.rect, wall_above_platform_2.rect]
+wall_under_platform_2 = platform(20, 300, 620, 150, (0,0,0)) #wall_1
+wall_above_platform_2 = platform(20, 300, 620, -150, (0,0,0)) #wall_2
+
+###############
+
+wall_3 = platform(20, (820-270), 850, -100, (0,0,0))
+
+lever_1 = lever(740, 395, small_lever_off_sprite, small_lever_on_sprite,"lever_1", True)
+
+platform_3 = platform(90, 20, 760, 320, (0,0,0))
+platform_4 = platform(80, 10, 620, 220, (0,0,0))
+platform_5 = platform(90,20, 760, 130, (0,0,0))
+
+lever_2 = lever(780, 265, small_lever_off_sprite, small_lever_on_sprite,"lever_2", True)
+
+coin_2 = None
+
+lever_3 = lever(780, 65, big_lever_off_sprite, big_lever_on_sprite,"lever_3", False)
+
+###########
+
+
+
+platforms = [floor.rect, grass.rect, wall_left.rect, platform_1.rect, platform_2.rect, platform_2_plate.rect ,wall_under_platform_2.rect, wall_above_platform_2.rect,
+wall_3.rect, platform_3.rect, platform_4.rect, platform_5.rect, roof.rect]
 
 pressure_plates = [platform_2_plate]
 
-non_collideable_objects = [lever_1]
+non_collideable_objects = [lever_1, lever_2, lever_3]
+
+levers = [lever_1, lever_2, lever_3]
+#coins = [coin_1]
 
 #######
 
@@ -151,7 +188,7 @@ non_collideable_objects = [lever_1]
 
 def update_pressure_plates():
     for pressure_plate in pressure_plates:
-        if ((player_1.rect.bottom == pressure_plate.rect.top) and (player_1.on_something == True)) or ((player_2.rect.bottom == pressure_plate.rect.top) and (player_2.on_something == True)):
+        if ((player_2.rect.bottom == pressure_plate.rect.top) and (player_2.on_something == True)):
             pressure_plate.activated = True; pressure_plate.colour = (0,0,255)
         else:
             pressure_plate.activated = False; pressure_plate.colour = (255,0,0)
@@ -164,8 +201,8 @@ def update_pressure_plates():
             if (pressure_plate.y - pressure_plate.y_unactivated) > 0:
                 pressure_plate.y -= 0.5; pressure_plate.rect.y = pressure_plate.y
 
-def pressure_plate_and_lever():
-    if platform_2_plate.activated == True:
+def pressure_plate_and_lever_effects(): #the things they activate
+    if platform_2_plate.activated == True or lever_1.on == True:
         if (wall_under_platform_2.start_position_y - wall_under_platform_2.y) < 150:
             wall_under_platform_2.y -= 5; wall_under_platform_2.rect.y = wall_under_platform_2.y
     else:
@@ -204,6 +241,26 @@ while game == True:
 
     pygame.draw.rect(screen, floor.colour, floor)
     pygame.draw.rect(screen, grass.colour, grass)
+    pygame.draw.rect(screen, roof.colour, roof.rect)
+
+        ###################################
+ 
+    #player_1.animation(screen)
+
+    player_1.movemenet_collision_gravity(platforms)
+    player_1.animation(screen)
+
+    player_2.animation(screen)
+    player_2.movemenet_collision_gravity(platforms)
+
+    update_pressure_plates()
+
+    pressure_plate_and_lever_effects ()
+
+    camera(player_1, player_2, platforms, SCREEN_WIDTH)
+
+    ##################################
+
     pygame.draw.rect(screen, wall_left.colour, wall_left)
     pygame.draw.rect(screen, platform_1.colour, platform_1)
 
@@ -213,28 +270,32 @@ while game == True:
     pygame.draw.rect(screen, wall_under_platform_2.colour, wall_under_platform_2)
     pygame.draw.rect(screen, wall_above_platform_2.colour, wall_above_platform_2)
 
-    pygame.draw.rect(screen, (0,0,0), lever_1.rect)
+    #pygame.draw.rect(screen, (0,0,0), lever_1.rect)
+
+    pygame.draw.rect(screen, wall_3.colour, wall_3.rect)
 
     screen.blit(lever_1.sprite, (lever_1.x, lever_1.y))
 
-    #pygame.draw.rect(screen, (0,0,0), player_1.rect)
-    #pygame.draw.rect(screen, (0,0,0), player_2.rect)
+    pygame.draw.rect(screen, platform_3.colour, platform_3.rect)
+
+    screen.blit(lever_2.sprite, (lever_2.x, lever_2.y))
+
+    pygame.draw.rect(screen, platform_4.colour, platform_4.rect)
+
+    pygame.draw.rect(screen, platform_5.colour, platform_5.rect)
+
+    screen.blit(lever_3.sprite, (lever_3.x, lever_3.y))
 
 
-    ###################################
- 
-    #player_1.animation(screen)
-    player_1.movemenet_collision_gravity(platforms)
-    player_1.animation(screen)
+    '''for coin in coins:
+        coin.animate(screen)'''
+        
+    #player_2.collect_coins(coins)
 
-    player_2.animation(screen)
-    player_2.movemenet_collision_gravity(platforms)
+    display_number_of_coins = display_number_of_coins_font.render(f"Coins: {player_2.coins_collected} / {total_coins}", True, (0,0,0))
+    screen.blit(display_number_of_coins, (5, 650))
 
-    update_pressure_plates()
 
-    pressure_plate_and_lever()
-
-    camera(player_1, player_2, platforms, SCREEN_WIDTH)
 
     ##################################
 
@@ -307,7 +368,16 @@ while game == True:
             #jump
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_UP: 
-                if player_2.on_something: player_2.jump = True
+                if player_2.on_something: player_2.jump = True;
+
+
+        #setting player_1 direction to None if they are holding down e for a non toggleable lever so they cant move during that period
+        for lever_ in levers:
+            if lever_.on == True and lever_.toggleable != True:
+                player_1.direction = None
+
+        ########
+
 
         if event.type == pygame.QUIT:
             pygame.quit()
