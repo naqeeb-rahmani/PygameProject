@@ -164,8 +164,8 @@ def update_pressure_plates():
             if (pressure_plate.y - pressure_plate.y_unactivated) > 0:
                 pressure_plate.y -= 0.5; pressure_plate.rect.y = pressure_plate.y
 
-def pressure_plate_and_lever():
-    if platform_2_plate.activated == True:
+def pressure_plate_and_lever_effects(): #the things they activate
+    if platform_2_plate.activated == True or lever_1.on == True:
         if (wall_under_platform_2.start_position_y - wall_under_platform_2.y) < 150:
             wall_under_platform_2.y -= 5; wall_under_platform_2.rect.y = wall_under_platform_2.y
     else:
@@ -232,7 +232,7 @@ while game == True:
 
     update_pressure_plates()
 
-    pressure_plate_and_lever()
+    pressure_plate_and_lever_effects ()
 
     camera(player_1, player_2, platforms, SCREEN_WIDTH)
 
