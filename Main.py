@@ -147,14 +147,14 @@ platform_2 = platform(300, 22.5, 340, 150, (0,0,0))
 platform_2_plate = pressure_plate(400, 140)
 
 coin_1 = coin(500, 100, pygame.transform.scale(coin_spritesheet.subsurface(0,0,16,16), (50,50)))
-coin_1.get_coin_animation(coin_spritesheet, 14)
 
 wall_under_platform_2 = platform(20, 300, 620, 150, (0,0,0)) #wall_1
 wall_above_platform_2 = platform(20, 300, 620, -150, (0,0,0)) #wall_2
 
 ###############
 
-wall_3 = platform(20, (820-270), 850, -100, (0,0,0))
+wall_3_below = platform(20, 320, 850, 130, (0,0,0))
+wall_3_above = platform(20, 130, 850, 0, (0,0,0))
 
 lever_1 = lever(740, 395, small_lever_off_sprite, small_lever_on_sprite,"lever_1", True)
 
@@ -164,23 +164,35 @@ platform_5 = platform(90,20, 760, 130, (0,0,0))
 
 lever_2 = lever(780, 265, small_lever_off_sprite, small_lever_on_sprite,"lever_2", True)
 
-coin_2 = None
+coin_2 = coin(650, 170, pygame.transform.scale(coin_spritesheet.subsurface(0,0,16,16), (50,50)))
 
 lever_3 = lever(780, 65, big_lever_off_sprite, big_lever_on_sprite,"lever_3", False)
 
 ###########
 
+platform_6 = platform(100, 20, 870, 200, (0,0,0))
+platform_6_extension = platform(100, 20, 870, 200, (0,0,0))
 
 
-platforms = [floor.rect, grass.rect, wall_left.rect, platform_1.rect, platform_2.rect, platform_2_plate.rect ,wall_under_platform_2.rect, wall_above_platform_2.rect,
-wall_3.rect, platform_3.rect, platform_4.rect, platform_5.rect, roof.rect]
+
+
+################
+
+
+platforms = [floor.rect, grass.rect, roof.rect ,wall_left.rect, platform_1.rect, platform_2.rect, platform_2_plate.rect ,wall_under_platform_2.rect, wall_above_platform_2.rect,
+wall_3_below.rect, wall_3_above.rect,platform_3.rect, platform_4.rect, platform_5.rect, platform_6.rect, platform_6_extension.rect]
+
+horizontally_moving_platforms = [platform_6_extension]
 
 pressure_plates = [platform_2_plate]
 
-non_collideable_objects = [lever_1, coin_1, lever_2, lever_3]
+non_collideable_objects = [lever_1, coin_1, lever_2, coin_2, lever_3]
 
 levers = [lever_1, lever_2, lever_3]
-coins = [coin_1]
+coins = [coin_1, coin_2]
+
+for coin in coins:
+    coin.get_coin_animation(coin_spritesheet, 14)
 
 #######
 
@@ -209,10 +221,23 @@ def pressure_plate_and_lever_effects(): #the things they activate
         if (wall_under_platform_2.start_position_y - wall_under_platform_2.y) > 0:
             wall_under_platform_2.y += 5; wall_under_platform_2.rect.y = wall_under_platform_2.y
 
+    if lever_1.on != True and lever_2.on != True and lever_3.on == True:
+        if (wall_3_above.start_position_y - wall_3_above.y) > -130:
+            wall_3_above.y += 5; wall_3_above.rect.y = wall_3_above.y
+    else:
+        if (wall_3_above.start_position_y - wall_3_above.y) < 0:
+            wall_3_above.y -= 5; wall_3_above.rect.y = wall_3_above.y
+    
+    if lever_1.on != True and lever_2.on == True and lever_3.on != True:
+        if (platform_6_extension.x - platform_6_extension.start_position_x) <= 90:
+            platform_6_extension.x += 5; platform_6_extension.rect.x = platform_6_extension.x
+    else:
+        if (platform_6_extension.x - platform_6_extension.start_position_x) > 0:
+            platform_6_extension.x -= 5; platform_6_extension.rect.x = platform_6_extension.x
 
 #camera#
 
-def camera(player_1, player_2, platforms, SCREEN_WIDTH):
+def camera(player_1, player_2, platforms, horizontally_moving_platforms,SCREEN_WIDTH):
     middle_xcor = (player_1.x + player_2.x) /2
 
     deadzone = 50
@@ -225,9 +250,11 @@ def camera(player_1, player_2, platforms, SCREEN_WIDTH):
         move = 0
 
     for platform in platforms:
-        platform.x += move
+        platform.x += move; platform
     for object in non_collideable_objects:
         object.x += move; object.rect.x = object.x
+    for horizontally_moving_platform in horizontally_moving_platforms:
+        horizontally_moving_platform.start_position_x += move; horizontally_moving_platform.x += move
   
     player_1.x += move; player_1.rect.x = player_1.x
     player_2.x += move; player_2.rect.x = player_2.x
@@ -257,7 +284,7 @@ while game == True:
 
     pressure_plate_and_lever_effects ()
 
-    camera(player_1, player_2, platforms, SCREEN_WIDTH)
+    camera(player_1, player_2, platforms, horizontally_moving_platforms,SCREEN_WIDTH)
 
     ##################################
 
@@ -272,7 +299,8 @@ while game == True:
 
     #pygame.draw.rect(screen, (0,0,0), lever_1.rect)
 
-    pygame.draw.rect(screen, wall_3.colour, wall_3.rect)
+    pygame.draw.rect(screen, wall_3_below.colour, wall_3_below.rect)
+    pygame.draw.rect(screen, wall_3_above.colour, wall_3_above.rect)
 
     screen.blit(lever_1.sprite, (lever_1.x, lever_1.y))
 
@@ -286,6 +314,8 @@ while game == True:
 
     screen.blit(lever_3.sprite, (lever_3.x, lever_3.y))
 
+    pygame.draw.rect(screen, platform_6.colour, platform_6)
+    pygame.draw.rect(screen, platform_6_extension.colour, platform_6_extension)
 
     for coin in coins:
         coin.animate(screen)

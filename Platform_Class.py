@@ -6,7 +6,7 @@ class platform:
 
         self.width = width; self.height = height
 
-        self.start_position_y = y
+        self.start_position_y = y; self.start_position_x = x
 
         self.x = x; self.y = y
 
