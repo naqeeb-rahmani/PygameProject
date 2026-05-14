@@ -22,6 +22,8 @@ game= True
 
 mode = "game"
 
+experiment_failed = False
+
 #-----------------------------------#
 
 pygame.init()
@@ -122,13 +124,11 @@ coin_spritesheet = pygame.image.load("Assets\Map\Coin\Coin 16x16.png")
 #################
 
 
-total_coins = "dont know yet"
-
 #to display number of coins#
 
 display_number_of_coins_font = pygame.font.Font("Assets\Font\Grand9K Pixel.ttf", 20)
 
-display_number_of_coins = display_number_of_coins_font.render(f"Coin: {player_2.coins_collected} / {total_coins}", True, (0,0,0))
+#display_number_of_coins = display_number_of_coins_font.render(f"Coin: {player_2.coins_collected} / {len(coins)}", True, (0,0,0))
 
 
 ####map####
@@ -235,23 +235,29 @@ wall_7 = platform(20, 100, 2850, 0, (0,0,0))
 
 platform_12 = platform(150, 20, 2850, 100, (0,0,0))
 
-lever_10 = lever(2850, 385, small_lever_off_sprite, small_lever_on_sprite,"lever_10", True)
+lever_10 = lever(2850, 395, small_lever_off_sprite, small_lever_on_sprite,"lever_10", True)
+
+plate_6 = pressure_plate(3100, 440)
 
 ###############33
+
+exit_roof = platform(2000, 300, 3000, 0, (0,0,0))
 
 
 platforms = [floor.rect, grass.rect, roof.rect ,wall_left.rect, platform_1.rect, platform_2.rect, platform_2_plate.rect ,wall_under_platform_2.rect, wall_above_platform_2.rect,
 wall_3_below.rect, wall_3_above.rect,platform_3.rect, platform_4.rect, platform_5.rect, platform_6.rect, platform_6_extension.rect, plate_2.rect, wall_4.rect, platform_7.rect, platform_8.rect, platform_9.rect, 
-wall_5_upper_part.rect, wall_5_under_part.rect, plate_3.rect, wall_6.rect, plate_4.rect, platform_10.rect, platform_11.rect, plate_5.rect,wall_7.rect, platform_12.rect]
+wall_5_upper_part.rect, wall_5_under_part.rect, plate_3.rect, wall_6.rect, plate_4.rect, platform_10.rect, platform_11.rect, plate_5.rect,wall_7.rect, platform_12.rect, exit_roof.rect, plate_6.rect]
 
 horizontally_moving_platforms = [platform_6_extension, platform_12]
 
-pressure_plates = [platform_2_plate, plate_2, plate_3, plate_4, plate_5]
+pressure_plates = [platform_2_plate, plate_2, plate_3, plate_4, plate_5, plate_6]
 
-non_collideable_objects = [lever_1, coin_1, lever_2, coin_2, lever_3, coin_3, lever_4, lever_5, lever_6, coin_4, coin_5, coin_6, coin_7, coin_8, lever_8, lever_9]
+non_collideable_objects = [lever_1, coin_1, lever_2, coin_2, lever_3, coin_3, lever_4, lever_5, lever_6, coin_4, coin_5, coin_6, coin_7, coin_8, lever_8, lever_9, lever_10]
 
 levers = [lever_1, lever_2, lever_3, lever_4, lever_5, lever_6, lever_7, lever_8, lever_9, lever_10]
 coins = [coin_1, coin_2, coin_3, coin_4, coin_5, coin_6, coin_7, coin_8]
+
+total_coins = len(coins)
 
 for coin in coins:
     coin.get_coin_animation(coin_spritesheet, 14)
@@ -261,12 +267,12 @@ for coin in coins:
 ################
 #for testing the map while making it
 
-for x in platforms:
+'''for x in platforms:
     x.x -= 2000
 for x in non_collideable_objects:
     x.x -= 2000
 for x in horizontally_moving_platforms:
-    x.x -= 2000; x.rect.x = x.x; x.start_position_x -= 2000; 
+    x.x -= 2000; x.rect.x = x.x; x.start_position_x -= 2000'''
 
 
 #pressure plate activation#
@@ -304,6 +310,17 @@ def pressure_plate_and_lever_effects(): #the things they activate
     if lever_1.on != True and lever_2.on == True and lever_3.on != True:
         if (platform_6_extension.x - platform_6_extension.start_position_x) <= 90:
             platform_6_extension.x += 5; platform_6_extension.rect.x = platform_6_extension.x
+
+            if player_2.rect.colliderect(platform_6_extension.rect):
+                player_2.x += 5
+                player_2.rect.x = player_2.x
+            
+            #its pretty much impossible for player_1 to collide with the platform because of its speed and becauce player_1 is the one that activates it 
+            #but i'll still check it just to be safe
+            
+            if player_1.rect.colliderect(platform_6_extension.rect):
+                player_1.x += 5
+                player_1.rect.x = player_1.x
     else:
         if (platform_6_extension.x - platform_6_extension.start_position_x) > 0:
             platform_6_extension.x -= 5; platform_6_extension.rect.x = platform_6_extension.x
@@ -314,6 +331,12 @@ def pressure_plate_and_lever_effects(): #the things they activate
     else:
         if (wall_4.start_position_y - wall_4.y) > 0:
             wall_4.y += 5; wall_4.rect.y = wall_4.y
+
+        for player in [player_1, player_2]:
+            if player.rect.colliderect(wall_4.rect) and player.rect.bottom > wall_4.rect.bottom:
+                experiment_failed = True
+                
+        
 
     if plate_3.activated == True and lever_5.on != True and lever_6.on == True:
         if (wall_5_upper_part.y - wall_5_upper_part.start_position_y) < 200:
@@ -334,6 +357,21 @@ def pressure_plate_and_lever_effects(): #the things they activate
             wall_7.y -= 5; wall_7.rect.y = wall_7.y
         if (platform_12.x - platform_12.start_position_x) < 150:
             platform_12.x += 7.5; platform_12.rect.x = platform_12.x
+
+    if ((lever_8.on == True) and (lever_9.on == True) and (lever_10.on == True) and (player_1.coins_collected == len(coins)) and (plate_5.activated != True) and (plate_4.activated != True)) or plate_6.activated == True:
+        if (wall_6.start_position_y - wall_6.y) < 150:
+            wall_6.y -= 5; wall_6.rect.y = wall_6.y
+    else:
+        if (wall_6.start_position_y - wall_6.y) > 0:
+            wall_6.y += 5; wall_6.rect.y = wall_6.y
+
+
+# experiment failed - player took damage
+
+def failed_or_not():
+    if player_1.y > 720 or player_1.y < 0 or player_2.y > 720 or player_2.y < 0:
+        experiment_failed = True
+    
 
 #camera#
 
@@ -360,6 +398,7 @@ def camera(player_1, player_2, platforms, horizontally_moving_platforms,SCREEN_W
     player_2.x += move; player_2.rect.x = player_2.x
 
 
+
 ###################################################################################
 
 while game == True:
@@ -378,6 +417,8 @@ while game == True:
     player_2.animation(screen)
     player_2.movemenet_collision_gravity(platforms)
 
+    failed_or_not()
+
     update_pressure_plates()
 
     pressure_plate_and_lever_effects ()
@@ -385,6 +426,7 @@ while game == True:
     camera(player_1, player_2, platforms, horizontally_moving_platforms,SCREEN_WIDTH)
 
     ##################################
+
 
     pygame.draw.rect(screen, wall_left.colour, wall_left)
     pygame.draw.rect(screen, platform_1.colour, platform_1)
@@ -455,6 +497,12 @@ while game == True:
     pygame.draw.rect(screen, platform_12.colour, platform_12.rect)
 
     screen.blit(lever_10.sprite, (lever_10.x, lever_10.y))
+
+    pygame.draw.rect(screen, exit_roof.colour, exit_roof)
+
+    pygame.draw.rect(screen, plate_6.colour, plate_6)
+
+    #screen.blit(lever_11.sprite, (lever_11.x, lever_11.y))
 
 ##############################################
     pygame.draw.rect(screen, floor.colour, floor)
