@@ -18,7 +18,9 @@ clock = pygame.time.Clock()
 
 #---------game-variables------------#
 
-game= True
+game = True #means that the game is on
+
+modes= ["game: running", "game: experiment failed", "game: end", "menu"]
 
 mode = "game"
 
@@ -34,7 +36,7 @@ player_1 = player("player_1", 400, 350, False)
 player_2 = player("player_2", 500, 350, True)
 player_2.speed = 6.7
 player_2.jump_height = 170
-
+ 
 #p1_interact_button = E 
 #p2_interact_button = RETURN 
 
@@ -239,14 +241,22 @@ lever_10 = lever(2850, 395, small_lever_off_sprite, small_lever_on_sprite,"lever
 
 plate_6 = pressure_plate(3100, 440)
 
+wall_right = platform(20, 720, 5000, 0, (0,0,0))
+
 ###############33
 
 exit_roof = platform(2000, 300, 3000, 0, (0,0,0))
 
 
+
 platforms = [floor.rect, grass.rect, roof.rect ,wall_left.rect, platform_1.rect, platform_2.rect, platform_2_plate.rect ,wall_under_platform_2.rect, wall_above_platform_2.rect,
 wall_3_below.rect, wall_3_above.rect,platform_3.rect, platform_4.rect, platform_5.rect, platform_6.rect, platform_6_extension.rect, plate_2.rect, wall_4.rect, platform_7.rect, platform_8.rect, platform_9.rect, 
-wall_5_upper_part.rect, wall_5_under_part.rect, plate_3.rect, wall_6.rect, plate_4.rect, platform_10.rect, platform_11.rect, plate_5.rect,wall_7.rect, platform_12.rect, exit_roof.rect, plate_6.rect]
+wall_5_upper_part.rect, wall_5_under_part.rect, plate_3.rect, wall_6.rect, plate_4.rect, platform_10.rect, platform_11.rect, plate_5.rect,wall_7.rect, platform_12.rect, exit_roof.rect, plate_6.rect, wall_right.rect]
+horizontally_moving_platforms = [platform_6_extension, platform_12]
+
+platforms_for_drawing = [floor, grass, roof, wall_left, platform_1, platform_2, wall_under_platform_2, wall_above_platform_2,
+wall_3_below, wall_3_above,platform_3, platform_4, platform_5, platform_6, platform_6_extension, wall_4, platform_7, platform_8, platform_9, 
+wall_5_upper_part, wall_5_under_part, wall_6, platform_10, platform_11, wall_7, platform_12, exit_roof, wall_right]
 
 horizontally_moving_platforms = [platform_6_extension, platform_12]
 
@@ -408,11 +418,14 @@ while game == True:
     #screen.blit(background, (0,0))
 
         ###################################
- 
-    #player_1.animation(screen)
 
     player_1.movemenet_collision_gravity(platforms)
     player_1.animation(screen)
+
+
+    for l in levers:
+        screen.blit(l.sprite, (l.x, l.y))
+
 
     player_2.animation(screen)
     player_2.movemenet_collision_gravity(platforms)
@@ -427,82 +440,12 @@ while game == True:
 
     ##################################
 
+    for p_p in pressure_plates:
+        pygame.draw.rect(screen, p_p.colour, p_p)
 
-    pygame.draw.rect(screen, wall_left.colour, wall_left)
-    pygame.draw.rect(screen, platform_1.colour, platform_1)
+    for p in platforms_for_drawing:
+        pygame.draw.rect(screen, p.colour, p)
 
-    pygame.draw.rect(screen, platform_2_plate.colour, platform_2_plate)
-    pygame.draw.rect(screen, platform_2.colour, platform_2)
-
-    pygame.draw.rect(screen, wall_under_platform_2.colour, wall_under_platform_2)
-    pygame.draw.rect(screen, wall_above_platform_2.colour, wall_above_platform_2)
-
-    #pygame.draw.rect(screen, (0,0,0), lever_1.rect)
-
-    pygame.draw.rect(screen, wall_3_below.colour, wall_3_below)
-    pygame.draw.rect(screen, wall_3_above.colour, wall_3_above)
-
-    screen.blit(lever_1.sprite, (lever_1.x, lever_1.y))
-
-    pygame.draw.rect(screen, platform_3.colour, platform_3)
-
-    screen.blit(lever_2.sprite, (lever_2.x, lever_2.y))
-
-    pygame.draw.rect(screen, platform_4.colour, platform_4)
-
-    pygame.draw.rect(screen, platform_5.colour, platform_5)
-
-    screen.blit(lever_3.sprite, (lever_3.x, lever_3.y))
-
-    pygame.draw.rect(screen, platform_6.colour, platform_6)
-    pygame.draw.rect(screen, platform_6_extension.colour, platform_6_extension)
-
-    pygame.draw.rect(screen, plate_2.colour, plate_2)
-
-    pygame.draw.rect(screen, wall_4.colour, wall_4)
-
-    screen.blit(lever_4.sprite, (lever_4.x, lever_4.y))
-
-    pygame.draw.rect(screen, platform_7.colour, platform_7)
-
-    pygame.draw.rect(screen, platform_8.colour, platform_8)
-
-    screen.blit(lever_5.sprite, (lever_5.x, lever_5.y))
-
-    screen.blit(lever_6.sprite, (lever_6.x, lever_6.y))
-
-    pygame.draw.rect(screen, plate_3.colour, plate_3)
-
-    pygame.draw.rect(screen, platform_9.colour, platform_9)
-
-    pygame.draw.rect(screen, wall_5_upper_part.colour, wall_5_upper_part)
-    pygame.draw.rect(screen, wall_5_under_part.colour, wall_5_under_part)
-
-    pygame.draw.rect(screen, plate_4.colour, plate_4)
-
-    pygame.draw.rect(screen, wall_6.colour, wall_6)
-
-    pygame.draw.rect(screen, platform_10.colour, platform_10.rect)
-    
-    pygame.draw.rect(screen, plate_5.colour, plate_5)
-
-    pygame.draw.rect(screen, platform_11.colour, platform_11.rect)
-
-    screen.blit(lever_8.sprite, (lever_8.x, lever_8.y))
-
-    screen.blit(lever_9.sprite, (lever_9.x, lever_9.y))
-
-    pygame.draw.rect(screen, wall_7.colour, wall_7.rect)
-
-    pygame.draw.rect(screen, platform_12.colour, platform_12.rect)
-
-    screen.blit(lever_10.sprite, (lever_10.x, lever_10.y))
-
-    pygame.draw.rect(screen, exit_roof.colour, exit_roof)
-
-    pygame.draw.rect(screen, plate_6.colour, plate_6)
-
-    #screen.blit(lever_11.sprite, (lever_11.x, lever_11.y))
 
 ##############################################
     pygame.draw.rect(screen, floor.colour, floor)
