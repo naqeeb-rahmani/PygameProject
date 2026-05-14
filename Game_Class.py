@@ -9,8 +9,6 @@ class Game:
     def __init__(self):
         self.on = True
 
-        self.experiment_failed = False
-
         self.mode = "game: running"
 
         self.modes = ["game: running", "game: experiment failed", "game: end", "menu"]

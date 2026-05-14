@@ -5,6 +5,9 @@ from Pressure_Plates_Class import *
 from Lever_Class import *
 from Coin_Class import *
 from Game_Class import *
+from Text_Class import *
+
+
 #screen#
 
 SCREEN_WIDTH = 1280
@@ -128,8 +131,6 @@ coin_spritesheet = pygame.image.load("Assets\Map\Coin\Coin 16x16.png")
 
 display_number_of_coins_font = pygame.font.Font("Assets\Font\Grand9K Pixel.ttf", 20)
 
-#display_number_of_coins = display_number_of_coins_font.render(f"Coin: {player_2.coins_collected} / {len(coins)}", True, (0,0,0))
-
 
 ####map####
 
@@ -140,11 +141,9 @@ background = pygame.image.load("Assets\Map\Background\Dungeon_brick_wall_grey.pn
 
 ## ### ##
 
-game.create_and_update_objects(MAP_WIDTH, SCREEN_HEIGHT, coin_spritesheet, small_lever_off_sprite, small_lever_on_sprite, big_lever_off_sprite, big_lever_on_sprite)
+#game.create_and_update_objects(MAP_WIDTH, SCREEN_HEIGHT, coin_spritesheet, small_lever_off_sprite, small_lever_on_sprite, big_lever_off_sprite, big_lever_on_sprite)
 
 ## functions ##
-
-
 
 ########################
 
@@ -205,7 +204,7 @@ def pressure_plate_and_lever_effects(): #the things they activate
 
         for player in [player_1, player_2]:
             if player.rect.colliderect(game.wall_4.rect) and player.rect.bottom >  game.wall_4.rect.bottom:
-                experiment_failed = True
+                game.mode = "game: experiment failed"
                 
         
 
@@ -241,7 +240,7 @@ def pressure_plate_and_lever_effects(): #the things they activate
 
 def failed_or_not():
     if player_1.y > 720 or player_1.y < 0 or player_2.y > 720 or player_2.y < 0:
-        game.experiment_failed = True
+        game.mode = "game: experiment failed"
     
 
 #camera#
@@ -269,6 +268,12 @@ def camera(player_1, player_2, platforms, horizontally_moving_platforms,SCREEN_W
     player_2.x += move; player_2.rect.x = player_2.x
 
 
+###### ending ###########
+
+bad_ending_text_1 = text(500, 300, "0x0000009C", 40, (0,255,0))
+
+
+
 ################################################################
 
 while game.on == True:
@@ -276,6 +281,7 @@ while game.on == True:
     game.create_and_update_objects(MAP_WIDTH, SCREEN_HEIGHT, coin_spritesheet, small_lever_off_sprite, small_lever_on_sprite, big_lever_off_sprite, big_lever_on_sprite)
     for coins in game.coins:
         coins.get_coin_animation(coin_spritesheet, 14)
+        
 
 
     ###################################################################################
@@ -419,6 +425,22 @@ while game.on == True:
             ########
 
 
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                exit()
+
+    while game.mode == "game: experiment failed":
+
+
+        screen.fill((0,0,0))
+
+        bad_ending_text_1.display_text(screen)
+
+
+        pygame.display.update()
+        clock.tick(120)
+
+        for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 exit()
