@@ -250,6 +250,13 @@ def button_effects():
 
         screen.blit(small_lever_off_sprite, (800, 100))
 
+        #pygame.draw.rect(screen, (0,0,0), pygame.Rect(950, 70, 10, 130))
+
+        screen.blit(big_lever_off_sprite, (1000, 92))
+
+        pygame.draw.rect(screen, (0,0,0), pygame.Rect(720, 230, 460, 10))
+
+
         for text in info_page_text:
             text.display_text(screen)
 
@@ -342,13 +349,26 @@ info_page_text_21 = text(400, 550, "Left Arrow - Left", 15, (100,170,50))
 info_page_text_22 = text(400, 580, "Right Arrow - Right", 15, (100,170,50))
 
 
+#levers#
+info_page_text_23 = text(750, 70, "Levers:", 25, (150,20,150))
+
+info_page_text_24 = text(760, 170, "- Toggleable", 15, (150,20,150))
+
+info_page_text_25 = text(970, 170, "- Non Toggleable", 15, (150,20,150))
+
+info_page_text_26 = text(820, 200, "Can only be activated by Player 1", 15, (150,20,150))
+
+#pressure plates and coins#
+
+info_page_text_27 = text(750, 250, "Pressure Plates And Coins:", 25, (100,170,50))
+
 
 
 #######33
 
 info_page_text = [info_page_text_1, info_page_text_2, info_page_text_3, info_page_text_4, info_page_text_5, info_page_text_5, info_page_text_6, info_page_text_7, info_page_text_8, info_page_text_9,
 info_page_text_10, info_page_text_11, info_page_text_12, info_page_text_13, info_page_text_14, info_page_text_15, info_page_text_16, info_page_text_17, info_page_text_18, info_page_text_19,
-info_page_text_20, info_page_text_21, info_page_text_22]
+info_page_text_20, info_page_text_21, info_page_text_22, info_page_text_23, info_page_text_24, info_page_text_25, info_page_text_26, info_page_text_27]
 
 
 
