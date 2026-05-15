@@ -6,7 +6,7 @@ from Lever_Class import *
 from Coin_Class import *
 from Game_Class import *
 from Text_Class import *
-
+from UI_Button_Class import *
 
 #screen#
 
@@ -235,6 +235,25 @@ def pressure_plate_and_lever_effects(): #the things they activate
         if (game.wall_6.start_position_y - game.wall_6.y) > 0:
             game.wall_6.y += 5; game.wall_6.rect.y = game.wall_6.y
 
+def button_effects():
+    if to_menu_button.activated == True:
+        game.mode = "menu"
+
+    if info_button.activated == True:
+        screen.blit(info_surface, (100, 70))
+
+        screen.blit(player_1_info_page_sprite, (100, 170))
+        pygame.draw.rect(screen, (0,0,0), pygame.Rect(360, 160, 10, 500))
+        screen.blit(player_2_info_page_sprite, (390, 170))
+
+        pygame.draw.rect(screen, (0,0,0), pygame.Rect(710, 70, 10, 620))
+
+        screen.blit(small_lever_off_sprite, (800, 100))
+
+        for text in info_page_text:
+            text.display_text(screen)
+
+
 
 # experiment failed - player took damage
 
@@ -267,16 +286,121 @@ def camera(player_1, player_2, platforms, horizontally_moving_platforms,SCREEN_W
     player_1.x += move; player_1.rect.x = player_1.x
     player_2.x += move; player_2.rect.x = player_2.x
 
+###### info/controls #######
+
+player_1_info_page_sprite = player_1.animations["idle"]["frames"]["right"][0]
+
+player_2_info_page_sprite = player_2.animations["idle"]["frames"]["left"][0]
+
+#player1 info/controls
+info_surface = pygame.Surface((1080, 620)); info_surface.set_alpha(210); info_surface.fill((0,0,0))
+
+info_page_text_1 = text(110, 70, "INFORMATION/CONTROLS:", 30, (255,255,255))
+
+info_page_text_2 = text(130, 150, "Player 1", 25, (150,20,150))
+
+info_page_text_3 = text(120, 300, "Stats:", 25, (150,20,150))
+
+info_page_text_4 = text(120, 350, "Speed: 6/10", 15, (150,20,150))
+
+info_page_text_5 = text(120, 380, "Strength: 10/10", 15, (150,20,150))
+
+info_page_text_6 = text(120, 410, "Weight Class: Light", 15, (150,20,150))
+
+info_page_text_7 = text(120, 440, "Can Activate Levers?: Yes", 15, (150,20,150))
+
+info_page_text_8 = text(120, 470, "Controls:", 25, (150,20,150))
+
+info_page_text_9 = text(120, 520, "W - Jump", 15, (150,20,150))
+
+info_page_text_10 = text(120, 550, "A - Left", 15, (150,20,150))
+
+info_page_text_11 = text(120, 580, "D - Right", 15, (150,20,150))
+
+info_page_text_12 = text(120, 610, "E - Interact", 15, (150,20,150))
+#################################
+
+#player2#
+info_page_text_13 = text(410, 150, "Player 2", 25, (100,170,50))
+
+info_page_text_14 = text(400, 300, "Stats:", 25, (100,170,50))
+
+info_page_text_15 = text(400, 350, "Speed: 10/10", 15, (100,170,50))
+
+info_page_text_16 = text(400, 380, "Strength: 5/10", 15, (100,170,50))
+
+info_page_text_17 = text(400, 410, "Weight Class: Heavy", 15, (100,170,50))
+
+info_page_text_18 = text(400, 440, "Can Activate Pressure Plates?: Yes", 15, (100,170,50))
+
+info_page_text_19 = text(400, 470, "Controls:", 25, (100,170,50))
+
+info_page_text_20 = text(400, 520, "Up Arrow - Jump", 15, (100,170,50))
+
+info_page_text_21 = text(400, 550, "Left Arrow - Left", 15, (100,170,50))
+
+info_page_text_22 = text(400, 580, "Right Arrow - Right", 15, (100,170,50))
+
+
+
+
+#######33
+
+info_page_text = [info_page_text_1, info_page_text_2, info_page_text_3, info_page_text_4, info_page_text_5, info_page_text_5, info_page_text_6, info_page_text_7, info_page_text_8, info_page_text_9,
+info_page_text_10, info_page_text_11, info_page_text_12, info_page_text_13, info_page_text_14, info_page_text_15, info_page_text_16, info_page_text_17, info_page_text_18, info_page_text_19,
+info_page_text_20, info_page_text_21, info_page_text_22]
+
+
+
 
 ###### ending ###########
 
-bad_ending_text_1 = text(500, 300, "0x0000009C", 40, (0,255,0))
+bad_ending_text_1 = text(500, 150, "0x0000009C", 40, (255,0,0))
+bad_ending_text_2 = text(385, 250, "EXPERIMENT FAILED", 50, (255,0,0))
 
+alarm_sound = pygame.mixer.Sound(r"Assets\Audio\freesound_community-emergency-alarm-69780.mp3")
+alarm_on = False
 
+###########################
+#button sprites#
+
+to_menu = pygame.image.load(r"Assets\User_Interface\ToMenu 16x16.png").convert_alpha()
+to_menu = pygame.transform.scale(to_menu, (55, 55))
+
+to_menu_pressed = pygame.image.load(r"Assets\User_Interface\ToMenuPressed 16x16.png").convert_alpha()
+to_menu_pressed = pygame.transform.scale(to_menu_pressed, (55, 55))
+
+info = pygame.image.load(r"Assets\User_Interface\Information 16x16.png").convert_alpha()
+info = pygame.transform.scale(info, (55, 55))
+
+info_pressed = pygame.image.load(r"Assets\User_Interface\InformationPressed 16x16.png").convert_alpha()
+info_pressed = pygame.transform.scale(info_pressed, (55, 55))
+
+##########################3
+
+to_menu_button = ui_button(10, 10, to_menu, to_menu_pressed)
+
+info_button = ui_button(80, 10, info, info_pressed)
+
+ui_buttons = [to_menu_button, info_button]
 
 ################################################################
 
 while game.on == True:
+
+    # resetting sounds #
+    pygame.mixer.Sound.stop(alarm_sound)
+    alarm_on = False
+
+    ####################
+    # resetting buttons #
+
+    to_menu_button.activated = False
+    info_button.activated = False
+
+
+
+    ########################
 
     game.create_and_update_objects(MAP_WIDTH, SCREEN_HEIGHT, coin_spritesheet, small_lever_off_sprite, small_lever_on_sprite, big_lever_off_sprite, big_lever_on_sprite)
     for coins in game.coins:
@@ -287,7 +411,21 @@ while game.on == True:
     ###################################################################################
 
     while game.mode == "menu":
-        pass
+
+        screen.fill((255,255,255))
+
+
+        pygame.display.update()
+        clock.tick(120)
+
+
+        for event in pygame.event.get():
+
+
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                exit()
+
 
 
 
@@ -298,6 +436,13 @@ while game.on == True:
         #screen.blit(background, (0,0))
 
             ###################################
+
+        #setting player_1 direction to None if they are holding down e for a non toggleable lever so they can't move during that period
+        for lever_ in game.levers:
+            if lever_.on == True and lever_.toggleable != True:
+                player_1.direction = None
+
+        #################################
 
         player_1.movemenet_collision_gravity(game.platforms)
         player_1.animation(screen)
@@ -342,8 +487,19 @@ while game.on == True:
         screen.blit(display_number_of_coins, (5, 650))
 
 
-
         ##################################
+        #buttons#
+
+        screen.blit(to_menu_button.current_sprite, (to_menu_button.x, to_menu_button.y))
+
+        screen.blit(info_button.current_sprite, (info_button.x, info_button.y))
+
+        button_effects()
+
+        print(info_button.activated)
+
+
+        #################################
 
         pygame.display.update()
         clock.tick(120)
@@ -417,12 +573,20 @@ while game.on == True:
                     if player_2.on_something: player_2.jump = True
 
 
-            #setting player_1 direction to None if they are holding down e for a non toggleable lever so they cant move during that period
-            for lever_ in game.levers:
-                if lever_.on == True and lever_.toggleable != True:
-                    player_1.direction = None
 
-            ########
+
+            ######## #ui buttons # ###########
+
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if pygame.mouse.get_pressed()[0]:
+                    for b in ui_buttons:
+                        b.update_sprite()
+            
+            if event.type == pygame.MOUSEBUTTONUP:
+                #if pygame.mouse.get_pressed()[0]:
+                for b in ui_buttons:
+                    b.update_sprite_and_state()
+
 
 
             if event.type == pygame.QUIT:
@@ -434,13 +598,34 @@ while game.on == True:
 
         screen.fill((0,0,0))
 
-        bad_ending_text_1.display_text(screen)
+        screen.blit(to_menu_button.current_sprite, (to_menu_button.x, to_menu_button.y))
+        
 
+        bad_ending_text_1.display_text(screen)
+        bad_ending_text_2.display_text(screen)
+
+        button_effects()
+
+        if alarm_on == False:
+            pygame.mixer.Sound.play(alarm_sound)
+            alarm_on = True
 
         pygame.display.update()
         clock.tick(120)
 
         for event in pygame.event.get():
+
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if pygame.mouse.get_pressed()[0]:
+                    for b in ui_buttons:
+                        b.update_sprite()
+            
+            if event.type == pygame.MOUSEBUTTONUP:
+                #if pygame.mouse.get_pressed()[0]:
+                for b in ui_buttons:
+                    b.update_sprite_and_state()
+
+
             if event.type == pygame.QUIT:
                 pygame.quit()
                 exit()
