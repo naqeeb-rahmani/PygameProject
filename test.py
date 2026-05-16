@@ -254,8 +254,9 @@ def button_effects():
 
         screen.blit(big_lever_off_sprite, (1000, 92))
 
-        pygame.draw.rect(screen, (0,0,0), pygame.Rect(720, 230, 460, 10))
+        pygame.draw.rect(screen, (0,0,0), pygame.Rect(720, 390, 460, 10))
 
+        
 
         for text in info_page_text:
             text.display_text(screen)
@@ -362,13 +363,30 @@ info_page_text_26 = text(820, 200, "Can only be activated by Player 1", 15, (150
 
 info_page_text_27 = text(750, 250, "Pressure Plates And Coins:", 25, (100,170,50))
 
+info_page_text_28 = text(750, 300, "Can only be activated or collected by Player 2", 15, (100,170,50))
 
+info_page_text_29 = text(750, 330, "For Pressure Plates:", 20, (100,170,50))
 
-#######33
+info_page_text_30 = text(750, 360, "Red means not activated and blue means activated", 15, (100,170,50))
 
+#######
+#info about passages#
+
+info_page_text_31 = text(750, 400, "How To Open Passages?", 25, (255,255,255))
+
+info_page_text_32 = text(750, 440, "By:", 20, (255,255,255))
+
+info_page_text_33 = text(780, 470, "- Activating certain levers", 15, (255,255,255))
+
+info_page_text_34 = text(780, 500, "- Activating certain levers + a pressure plate", 15, (255,255,255))
+
+info_page_text_35 = text(780, 530, "- Activating certain levers + having collected", 15, (255,255,255))
+info_page_text_36 = text(790, 550, " a certain amount of coins", 15, (255,255,255))
+#####
 info_page_text = [info_page_text_1, info_page_text_2, info_page_text_3, info_page_text_4, info_page_text_5, info_page_text_5, info_page_text_6, info_page_text_7, info_page_text_8, info_page_text_9,
 info_page_text_10, info_page_text_11, info_page_text_12, info_page_text_13, info_page_text_14, info_page_text_15, info_page_text_16, info_page_text_17, info_page_text_18, info_page_text_19,
-info_page_text_20, info_page_text_21, info_page_text_22, info_page_text_23, info_page_text_24, info_page_text_25, info_page_text_26, info_page_text_27]
+info_page_text_20, info_page_text_21, info_page_text_22, info_page_text_23, info_page_text_24, info_page_text_25, info_page_text_26, info_page_text_27, info_page_text_28, info_page_text_29,
+info_page_text_30, info_page_text_31, info_page_text_32, info_page_text_33, info_page_text_34, info_page_text_35, info_page_text_36]
 
 
 
