@@ -13,13 +13,18 @@ class Game:
 
         self.modes = ["game: running", "game: experiment failed", "game: end", "menu"]
 
+        self.time = None
+        self.time_running = False
+
+        self.start_time = None
+        self.end_time = None
+
 
 
     def create_and_update_objects(self, MAP_WIDTH, SCREEN_HEIGHT, coin_spritesheet, small_lever_off_sprite, small_lever_on_sprite, big_lever_off_sprite, big_lever_on_sprite):
 
 
         ##################
-
 
         self.floor = platform(MAP_WIDTH + 2000, 270, 0, 450, (150,75,0))
         self.grass = platform(MAP_WIDTH + 2000, SCREEN_HEIGHT - 710, 0, 450, (0,100,0))

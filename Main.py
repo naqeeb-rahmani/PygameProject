@@ -139,7 +139,9 @@ display_number_of_coins_font = pygame.font.Font("Assets\Font\Grand9K Pixel.ttf",
 background = pygame.image.load("Assets\Map\Background\Dungeon_brick_wall_grey.png").convert_alpha()
 background = pygame.transform.scale(background, (1280, 450))
 
-background_surface = background; background_surface.set_alpha(200)
+background_1 = background; background_1.set_alpha(200)
+
+
 
 
 ## ### ##
@@ -414,6 +416,7 @@ good_ending_surface = pygame.Surface((1280, 720)); info_surface.set_alpha(200); 
 
 good_ending_text_1 = text(325, 250, "EXPERIMENT SUCCESFUL", 50, (0,255,0))
 
+
 #############
 
 bad_ending_text_1 = text(500, 150, "0x0000009C", 40, (255,0,0))
@@ -421,6 +424,7 @@ bad_ending_text_2 = text(385, 250, "EXPERIMENT FAILED", 50, (255,0,0))
 
 alarm_sound = pygame.mixer.Sound(r"Assets\Audio\freesound_community-emergency-alarm-69780.mp3")
 alarm_on = False
+
 
 ###########################
 #button sprites#
@@ -450,6 +454,12 @@ ui_buttons_while_menu = []
 ################################################################
 
 while game.on == True:
+
+    game.time = None
+    game.start_time = None
+    game.end_time = None
+    game.time_running = False
+
 
     #resetting alpha for ending screen#
     ending_surface_alpha = 0
@@ -498,9 +508,12 @@ while game.on == True:
 
     while game.mode == "game: running":
 
+        if game.time_running == False:
+            game.start_time = pygame.time.get_ticks(); game.time_running = True
+
         screen.fill((255,255,255))
 
-        screen.blit(background_surface, (0,0))
+        screen.blit(background_1, (0,0))
 
             ###################################
 
@@ -676,10 +689,18 @@ while game.on == True:
 
     while game.mode == "game: end":
 
+        if game.time_running == True:
+            game.time_running = False
+            game.end_time = pygame.time.get_ticks()
+            game.time  = (game.end_time - game.start_time)//1000 #in seconds
+            ending_time = text(350, 350, f"Time: {game.time} seconds or around {(game.time)//60} minute(s)", 30, (255,255,255))
+ 
+
         screen.fill((0,0,0))
 
         good_ending_text_1.display_text(screen)
 
+        ending_time.display_text(screen)
 
         for b in ui_buttons_while_game_end:
             screen.blit(b.current_sprite, (b.x, b.y))
@@ -709,6 +730,13 @@ while game.on == True:
 
     while game.mode == "game: experiment failed":
 
+        if game.time_running == True:
+            game.time_running = False
+            game.end_time = pygame.time.get_ticks()
+            game.time  = (game.end_time - game.start_time)//1000 #in seconds
+            ending_time = text(350, 350, f"Time: {game.time} seconds or around {(game.time)//60} minute(s)", 30, (255,255,255))
+ 
+
 
         screen.fill((0,0,0))
 
@@ -718,6 +746,8 @@ while game.on == True:
 
         bad_ending_text_1.display_text(screen)
         bad_ending_text_2.display_text(screen)
+
+        ending_time.display_text(screen)
 
         button_effects()
 
