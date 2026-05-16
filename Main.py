@@ -136,7 +136,10 @@ display_number_of_coins_font = pygame.font.Font("Assets\Font\Grand9K Pixel.ttf",
 
 ### background ###
 
-background = pygame.image.load("Assets\Map\Background\Dungeon_brick_wall_grey.png")
+background = pygame.image.load("Assets\Map\Background\Dungeon_brick_wall_grey.png").convert_alpha()
+background = pygame.transform.scale(background, (1280, 450))
+
+background_surface = background; background_surface.set_alpha(200)
 
 
 ## ### ##
@@ -406,9 +409,10 @@ info_page_text_30, info_page_text_31, info_page_text_32, info_page_text_33, info
 ###### ending ###########
 
 #good ending
-ending_surface_alpha = 0
-ending_surface = pygame.Surface((1280, 720)); info_surface.set_alpha(); info_surface.fill((0,0,0))
+good_ending_surface_alpha = 0
+good_ending_surface = pygame.Surface((1280, 720)); info_surface.set_alpha(200); info_surface.fill((0,0,0))
 
+good_ending_text_1 = text(325, 250, "EXPERIMENT SUCCESFUL", 50, (0,255,0))
 
 #############
 
@@ -496,7 +500,7 @@ while game.on == True:
 
         screen.fill((255,255,255))
 
-        #screen.blit(background, (0,0))
+        screen.blit(background_surface, (0,0))
 
             ###################################
 
@@ -560,16 +564,16 @@ while game.on == True:
         ##################################
         #buttons#
 
-        screen.blit(to_menu_button.current_sprite, (to_menu_button.x, to_menu_button.y))
-
-        screen.blit(info_button.current_sprite, (info_button.x, info_button.y))
-
+        for b in ui_buttons_while_game:
+            screen.blit(b.current_sprite, (b.x, b.y))
+            
         button_effects()
 
                 #ending fade#
         if player_1.collided_with_completion_rect == True and player_2.collided_with_completion_rect == True:
-            screen.blit(ending_surface, (0,0))
-            ending_surface_alpha += 1
+            good_ending_surface.set_alpha(ending_surface_alpha)
+            screen.blit(good_ending_surface, (0,0))
+            ending_surface_alpha += 5
             if ending_surface_alpha == 255:
                 game.mode = "game: end"
 
@@ -674,10 +678,16 @@ while game.on == True:
 
         screen.fill((0,0,0))
 
+        good_ending_text_1.display_text(screen)
+
+
+        for b in ui_buttons_while_game_end:
+            screen.blit(b.current_sprite, (b.x, b.y))
+
+        button_effects()
 
 
         pygame.display.update()
-
 
         for event in pygame.event.get():
 
@@ -702,7 +712,8 @@ while game.on == True:
 
         screen.fill((0,0,0))
 
-        screen.blit(to_menu_button.current_sprite, (to_menu_button.x, to_menu_button.y))
+        for b in ui_buttons_while_game_end:
+            screen.blit(b.current_sprite, (b.x, b.y))
         
 
         bad_ending_text_1.display_text(screen)

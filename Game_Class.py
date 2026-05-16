@@ -141,7 +141,7 @@ class Game:
 
         self.platforms_for_drawing = [self.floor, self.grass, self.roof, self.wall_left, self.platform_1, self.platform_2, self.wall_under_platform_2, self.wall_above_platform_2,
         self.wall_3_below, self.wall_3_above, self.platform_3, self.platform_4, self.platform_5, self.platform_6, self.platform_6_extension, self.wall_4, self.platform_7, self.platform_8, self.platform_9, 
-        self.wall_5_upper_part, self.wall_5_under_part, self.wall_6, self.platform_10, self.platform_11, self.wall_7, self.platform_12, self.exit_roof, self.wall_right, self.rect_for_checking_completion]
+        self.wall_5_upper_part, self.wall_5_under_part, self.wall_6, self.platform_10, self.platform_11, self.wall_7, self.platform_12, self.exit_roof, self.wall_right]
 
         self.horizontally_moving_platforms = [self.platform_6_extension, self.platform_12]
 
