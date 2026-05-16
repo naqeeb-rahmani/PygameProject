@@ -148,11 +148,17 @@ background = pygame.image.load("Assets\Map\Background\Dungeon_brick_wall_grey.pn
 ########################
 
 def update_pressure_plates():
+    activated_p_p = None
+
     for pressure_plate in game.pressure_plates:
-        if ((player_2.rect.bottom == pressure_plate.rect.top) and (player_2.on_something == True)):
+        player_pos = pygame.math.Vector2(player_2.rect.center)
+        plate_pos = pygame.math.Vector2(pressure_plate.rect.center)
+
+        if ((player_2.rect.bottom == pressure_plate.rect.top) and (player_2.on_something == True)) and (player_pos.distance_to(plate_pos) < 100):
             pressure_plate.activated = True; pressure_plate.colour = (0,0,255)
         else:
             pressure_plate.activated = False; pressure_plate.colour = (255,0,0)
+
 
         if pressure_plate.activated == True:
             if (pressure_plate.y - pressure_plate.y_unactivated) < 8:
@@ -161,6 +167,12 @@ def update_pressure_plates():
         else:
             if (pressure_plate.y - pressure_plate.y_unactivated) > 0:
                 pressure_plate.y -= 0.5; pressure_plate.rect.y = pressure_plate.y
+
+
+
+
+        
+
 
 def pressure_plate_and_lever_effects(): #the things they activate
     if game.platform_2_plate.activated == True or game.lever_1.on == True:
@@ -295,13 +307,13 @@ def camera(player_1, player_2, platforms, horizontally_moving_platforms,SCREEN_W
     player_2.x += move; player_2.rect.x = player_2.x
 
 ###### info/controls #######
+info_surface = pygame.Surface((1080, 620)); info_surface.set_alpha(210); info_surface.fill((0,0,0))
 
 player_1_info_page_sprite = player_1.animations["idle"]["frames"]["right"][0]
 
 player_2_info_page_sprite = player_2.animations["idle"]["frames"]["left"][0]
 
 #player1 info/controls
-info_surface = pygame.Surface((1080, 620)); info_surface.set_alpha(210); info_surface.fill((0,0,0))
 
 info_page_text_1 = text(110, 70, "INFORMATION/CONTROLS:", 30, (255,255,255))
 
@@ -393,6 +405,13 @@ info_page_text_30, info_page_text_31, info_page_text_32, info_page_text_33, info
 
 ###### ending ###########
 
+#good ending
+ending_surface_alpha = 0
+ending_surface = pygame.Surface((1280, 720)); info_surface.set_alpha(); info_surface.fill((0,0,0))
+
+
+#############
+
 bad_ending_text_1 = text(500, 150, "0x0000009C", 40, (255,0,0))
 bad_ending_text_2 = text(385, 250, "EXPERIMENT FAILED", 50, (255,0,0))
 
@@ -427,6 +446,10 @@ ui_buttons_while_menu = []
 ################################################################
 
 while game.on == True:
+
+    #resetting alpha for ending screen#
+    ending_surface_alpha = 0
+
 
     # resetting sounds #
     pygame.mixer.Sound.stop(alarm_sound)
@@ -511,6 +534,13 @@ while game.on == True:
         for p in game.platforms_for_drawing:
             pygame.draw.rect(screen, p.colour, p)
 
+        if player_1.rect.colliderect(game.rect_for_checking_completion):
+            player_1.collided_with_completion_rect = True
+        if player_2.rect.colliderect(game.rect_for_checking_completion):
+            player_2.collided_with_completion_rect = True
+
+        print(f"{player_1.collided_with_completion_rect} and {player_2.collided_with_completion_rect}")
+
 
     ##############################################
         pygame.draw.rect(screen, game.floor.colour, game.floor)
@@ -536,7 +566,13 @@ while game.on == True:
 
         button_effects()
 
-        print(info_button.activated)
+                #ending fade#
+        if player_1.collided_with_completion_rect == True and player_2.collided_with_completion_rect == True:
+            screen.blit(ending_surface, (0,0))
+            ending_surface_alpha += 1
+            if ending_surface_alpha == 255:
+                game.mode = "game: end"
+
 
 
         #################################
@@ -632,6 +668,34 @@ while game.on == True:
             if event.type == pygame.QUIT:
                 pygame.quit()
                 exit()
+
+
+    while game.mode == "game: end":
+
+        screen.fill((0,0,0))
+
+
+
+        pygame.display.update()
+
+
+        for event in pygame.event.get():
+
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if pygame.mouse.get_pressed()[0]:
+                    for b in ui_buttons_while_game_end:
+                        b.update_sprite()
+            
+            if event.type == pygame.MOUSEBUTTONUP:
+                #if pygame.mouse.get_pressed()[0]:
+                for b in ui_buttons_while_game_end:
+                    b.update_sprite_and_state()
+
+
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                exit()
+
 
     while game.mode == "game: experiment failed":
 

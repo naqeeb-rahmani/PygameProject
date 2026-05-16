@@ -120,6 +120,11 @@ class Game:
 
         self.plate_6 = pressure_plate(3100, 440)
 
+
+
+        self.rect_for_checking_completion = platform(500, 100, 4500, 300, (0,255,0))
+
+
         self.wall_right = platform(20, 720, 5000, 0, (0,0,0))
 
         ###############33
@@ -136,13 +141,13 @@ class Game:
 
         self.platforms_for_drawing = [self.floor, self.grass, self.roof, self.wall_left, self.platform_1, self.platform_2, self.wall_under_platform_2, self.wall_above_platform_2,
         self.wall_3_below, self.wall_3_above, self.platform_3, self.platform_4, self.platform_5, self.platform_6, self.platform_6_extension, self.wall_4, self.platform_7, self.platform_8, self.platform_9, 
-        self.wall_5_upper_part, self.wall_5_under_part, self.wall_6, self.platform_10, self.platform_11, self.wall_7, self.platform_12, self.exit_roof, self.wall_right]
+        self.wall_5_upper_part, self.wall_5_under_part, self.wall_6, self.platform_10, self.platform_11, self.wall_7, self.platform_12, self.exit_roof, self.wall_right, self.rect_for_checking_completion]
 
         self.horizontally_moving_platforms = [self.platform_6_extension, self.platform_12]
 
         self.pressure_plates = [self.platform_2_plate, self.plate_2, self.plate_3, self.plate_4, self.plate_5, self.plate_6]
 
-        self.non_collideable_objects = [self.lever_1, self.coin_1, self.lever_2, self.coin_2, self.lever_3, self.coin_3, self.lever_4, self.lever_5, self.lever_6, self.coin_4, self.coin_5, self.coin_6, self.coin_7, self.coin_8, self.lever_8, self.lever_9, self.lever_10]
+        self.non_collideable_objects = [self.lever_1, self.coin_1, self.lever_2, self.coin_2, self.lever_3, self.coin_3, self.lever_4, self.lever_5, self.lever_6, self.coin_4, self.coin_5, self.coin_6, self.coin_7, self.coin_8, self.lever_8, self.lever_9, self.lever_10, self.rect_for_checking_completion]
 
         self.levers = [self.lever_1, self.lever_2, self.lever_3, self.lever_4, self.lever_5, self.lever_6, self.lever_7, self.lever_8, self.lever_9, self.lever_10]
         self.coins = [self.coin_1, self.coin_2, self.coin_3, self.coin_4, self.coin_5, self.coin_6, self.coin_7, self.coin_8]

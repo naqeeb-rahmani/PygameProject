@@ -20,6 +20,8 @@ class player:
         self.coins_collected = 0
 
 
+        self.collided_with_completion_rect = False #to check if the player has reached the end of the level
+
 
 
         self.animations = {
