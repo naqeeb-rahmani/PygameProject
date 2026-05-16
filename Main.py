@@ -277,9 +277,9 @@ def camera(player_1, player_2, platforms, horizontally_moving_platforms,SCREEN_W
 
     deadzone = 50
 
-    if middle_xcor > (((SCREEN_WIDTH)/2) + deadzone):
+    if (middle_xcor > (((SCREEN_WIDTH)/2) + deadzone)) and game.wall_right.rect.x > 1400:
         move = -5
-    elif middle_xcor < (((SCREEN_WIDTH)/2) - deadzone ):
+    elif (middle_xcor < (((SCREEN_WIDTH)/2) - deadzone)) and game.wall_left.rect.x < 0:
         move = 5
     else:
         move = 0
@@ -420,7 +420,9 @@ to_menu_button = ui_button(10, 10, to_menu, to_menu_pressed)
 
 info_button = ui_button(80, 10, info, info_pressed)
 
-ui_buttons = [to_menu_button, info_button]
+ui_buttons_while_game = [to_menu_button, info_button]
+ui_buttons_while_game_end = [to_menu_button]
+ui_buttons_while_menu = []
 
 ################################################################
 
@@ -617,12 +619,12 @@ while game.on == True:
 
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if pygame.mouse.get_pressed()[0]:
-                    for b in ui_buttons:
+                    for b in ui_buttons_while_game:
                         b.update_sprite()
             
             if event.type == pygame.MOUSEBUTTONUP:
                 #if pygame.mouse.get_pressed()[0]:
-                for b in ui_buttons:
+                for b in ui_buttons_while_game:
                     b.update_sprite_and_state()
 
 
@@ -655,12 +657,12 @@ while game.on == True:
 
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if pygame.mouse.get_pressed()[0]:
-                    for b in ui_buttons:
+                    for b in ui_buttons_while_game_end:
                         b.update_sprite()
             
             if event.type == pygame.MOUSEBUTTONUP:
                 #if pygame.mouse.get_pressed()[0]:
-                for b in ui_buttons:
+                for b in ui_buttons_while_game_end:
                     b.update_sprite_and_state()
 
 
