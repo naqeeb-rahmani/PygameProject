@@ -7,11 +7,12 @@ from Coin_Class import *
 from Game_Class import *
 from Text_Class import *
 from UI_Button_Class import *
+from Menu_Button_Class import *
 
 #screen#
 
 SCREEN_WIDTH = 1280
-MAP_WIDTH = 3000
+MAP_WIDTH = 3000 #actually 5000 but the game logic is based on 3000, but i added 2000 in the functions were it is used so it checks the whole map
 SCREEN_HEIGHT = 720
 
 clock = pygame.time.Clock()
@@ -31,12 +32,6 @@ game = Game()
 
 pygame.init()
 
-player_1 = player("player_1", 400, 350, False)
-
-
-player_2 = player("player_2", 500, 350, True)
-player_2.speed = 6.7
-player_2.jump_height = 170
 
 #p1_interact_button = E 
 #p2_interact_button = RETURN 
@@ -48,63 +43,66 @@ pygame.display.set_caption("Not Alone")
 
 #  saving the animations  #
 
-#player_1
+player_1 = player("player_1", 400, 350, False)
+
+player_2 = player("player_2", 500, 350, True)
+player_2.speed = 6.7
+player_2.jump_height = 170
+
+#player 1
 
 player_1_idle_spritesheet_right = pygame.image.load("Assets\Player_Sprites\Player_1\PlayerIdleRight 48x48.png").convert_alpha()
 player_1_idle_spritesheet_left = pygame.image.load("Assets\Player_Sprites\Player_1\PlayerIdleLeft 48x48.png").convert_alpha()
-
-player_1.get_animations("idle", player_1.animations["idle"]["number of frames"], "right", player_1_idle_spritesheet_right)
-player_1.get_animations("idle", player_1.animations["idle"]["number of frames"], "left", player_1_idle_spritesheet_left)
 
 ###
 
 player_1_walk_spritesheet_right = pygame.image.load("Assets\Player_Sprites\Player_1\PlayerWalkRight 48x48.png").convert_alpha()
 player_1_walk_spritesheet_left = pygame.image.load("Assets\Player_Sprites\Player_1\PlayerWalkLeft 48x48.png").convert_alpha()
 
-player_1.get_animations("walk", player_1.animations["walk"]["number of frames"], "right", player_1_walk_spritesheet_right)
-player_1.get_animations("walk", player_1.animations["walk"]["number of frames"], "left", player_1_walk_spritesheet_left)
-
 ###
 
 player_1_land_spritesheet_right = pygame.image.load("Assets\Player_Sprites\Player_1\PlayerLandRight 48x48.png").convert_alpha()
 player_1_land_spritesheet_left = pygame.image.load("Assets\Player_Sprites\Player_1\PlayerLandLeft 48x48.png").convert_alpha()
 
-player_1.get_animations("land", player_1.animations["land"]["number of frames"], "right", player_1_land_spritesheet_right)
-player_1.get_animations("land", player_1.animations["land"]["number of frames"], "left", player_1_land_spritesheet_left)
-
 player_1_jump_spritesheet_right = pygame.image.load("Assets\Player_Sprites\Player_1\PlayerJumpRight 48x48.png").convert_alpha()
 player_1_jump_spritesheet_left = pygame.image.load("Assets\Player_Sprites\Player_1\PlayerJumpLeft 48x48.png").convert_alpha()
-
-player_1.get_animations("jump", player_1.animations["jump"]["number of frames"], "right", player_1_jump_spritesheet_right)
-player_1.get_animations("jump", player_1.animations["jump"]["number of frames"], "left", player_1_jump_spritesheet_left)
 
 #player_2#
 player_2_idle_spritesheet_right = pygame.image.load("Assets\Player_Sprites\Player_2\PlayerIdleRight 48x48.png").convert_alpha()
 player_2_idle_spritesheet_left = pygame.image.load("Assets\Player_Sprites\Player_2\PlayerIdleLeft 48x48.png").convert_alpha()
 
-player_2.get_animations("idle", player_1.animations["idle"]["number of frames"], "right", player_2_idle_spritesheet_right)
-player_2.get_animations("idle", player_1.animations["idle"]["number of frames"], "left", player_2_idle_spritesheet_left)
-
 
 player_2_run_spritesheet_right = pygame.image.load("Assets\Player_Sprites\Player_2\PlayerRunRight 48x48.png").convert_alpha()
 player_2_run_spritesheet_left = pygame.image.load("Assets\Player_Sprites\Player_2\PlayerRunLeft 48x48.png").convert_alpha()
-
-player_2.get_animations("run", player_1.animations["run"]["number of frames"], "right", player_2_run_spritesheet_right)
-player_2.get_animations("run", player_1.animations["run"]["number of frames"], "left", player_2_run_spritesheet_left)
 
 ###
 
 player_2_jump_spritesheet_right = pygame.image.load("Assets\Player_Sprites\Player_2\PlayerJumpRight 48x48.png").convert_alpha()
 player_2_jump_spritesheet_left = pygame.image.load("Assets\Player_Sprites\Player_2\PlayerJumpLeft 48x48.png").convert_alpha()
 
-player_2.get_animations("jump", player_2.animations["jump"]["number of frames"], "right", player_2_jump_spritesheet_right)
-player_2.get_animations("jump", player_2.animations["jump"]["number of frames"], "left", player_2_jump_spritesheet_left)
-
 player_2_land_spritesheet_right = pygame.image.load("Assets\Player_Sprites\Player_2\PlayerLandRight 48x48.png").convert_alpha()
 player_2_land_spritesheet_left = pygame.image.load("Assets\Player_Sprites\Player_2\PlayerLandLeft 48x48.png").convert_alpha()
 
-player_2.get_animations("land", player_2.animations["land"]["number of frames"], "right", player_2_land_spritesheet_right)
-player_2.get_animations("land", player_2.animations["land"]["number of frames"], "left", player_2_land_spritesheet_left)
+def get_player_anims():
+    player_1.get_animations("idle", player_1.animations["idle"]["number of frames"], "right", player_1_idle_spritesheet_right)
+    player_1.get_animations("idle", player_1.animations["idle"]["number of frames"], "left", player_1_idle_spritesheet_left)
+    player_1.get_animations("walk", player_1.animations["walk"]["number of frames"], "right", player_1_walk_spritesheet_right)
+    player_1.get_animations("walk", player_1.animations["walk"]["number of frames"], "left", player_1_walk_spritesheet_left)
+    player_1.get_animations("land", player_1.animations["land"]["number of frames"], "right", player_1_land_spritesheet_right)
+    player_1.get_animations("land", player_1.animations["land"]["number of frames"], "left", player_1_land_spritesheet_left)
+    player_1.get_animations("jump", player_1.animations["jump"]["number of frames"], "right", player_1_jump_spritesheet_right)
+    player_1.get_animations("jump", player_1.animations["jump"]["number of frames"], "left", player_1_jump_spritesheet_left)
+
+    player_2.get_animations("idle", player_1.animations["idle"]["number of frames"], "right", player_2_idle_spritesheet_right)
+    player_2.get_animations("idle", player_1.animations["idle"]["number of frames"], "left", player_2_idle_spritesheet_left)
+    player_2.get_animations("run", player_1.animations["run"]["number of frames"], "right", player_2_run_spritesheet_right)
+    player_2.get_animations("run", player_1.animations["run"]["number of frames"], "left", player_2_run_spritesheet_left)
+    player_2.get_animations("jump", player_2.animations["jump"]["number of frames"], "right", player_2_jump_spritesheet_right)
+    player_2.get_animations("jump", player_2.animations["jump"]["number of frames"], "left", player_2_jump_spritesheet_left)
+    player_2.get_animations("land", player_2.animations["land"]["number of frames"], "right", player_2_land_spritesheet_right)
+    player_2.get_animations("land", player_2.animations["land"]["number of frames"], "left", player_2_land_spritesheet_left)
+
+get_player_anims()
 
 #####################################################################
 
@@ -253,10 +251,10 @@ def pressure_plate_and_lever_effects(): #the things they activate
             game.wall_6.y += 5; game.wall_6.rect.y = game.wall_6.y
 
 def button_effects():
-    if to_menu_button.activated == True:
+    if to_menu_button.activated == True and game.mode != "menu":
         game.mode = "menu"
 
-    if info_button.activated == True:
+    if info_button.activated == True and game.mode == "game: running":
         screen.blit(info_surface, (100, 70))
 
         screen.blit(player_1_info_page_sprite, (100, 170))
@@ -273,10 +271,18 @@ def button_effects():
 
         pygame.draw.rect(screen, (0,0,0), pygame.Rect(720, 390, 460, 10))
 
-        
-
         for text in info_page_text:
             text.display_text(screen)
+
+    if menu_play_button.activated == True and game.mode == "menu":
+        game.mode = "game: running"
+        menu_play_button.activated = False
+
+    if menu_credits_button.activated == True and game.mode == "menu":
+        game.mode = "credits"
+        menu_credits_button.activated = False
+
+        
 
 
 
@@ -412,7 +418,7 @@ info_page_text_30, info_page_text_31, info_page_text_32, info_page_text_33, info
 
 #good ending
 good_ending_surface_alpha = 0
-good_ending_surface = pygame.Surface((1280, 720)); info_surface.set_alpha(200); info_surface.fill((0,0,0))
+good_ending_surface = pygame.Surface((1280, 720)); good_ending_surface.set_alpha(good_ending_surface_alpha); good_ending_surface.fill((0,0,0))
 
 good_ending_text_1 = text(325, 250, "EXPERIMENT SUCCESFUL", 50, (0,255,0))
 
@@ -448,17 +454,77 @@ to_menu_button = ui_button(10, 10, to_menu, to_menu_pressed)
 info_button = ui_button(80, 10, info, info_pressed)
 
 ui_buttons_while_game = [to_menu_button, info_button]
-ui_buttons_while_game_end = [to_menu_button]
+ui_buttons_while_game_end_and_credits = [to_menu_button]
 ui_buttons_while_menu = []
+
+#menu#
+
+menu_bg = pygame.image.load(r"Assets\User_Interface\MenuBackground.png").convert_alpha()
+
+play_button_sprite = pygame.image.load(r"Assets\User_Interface\Play 36x36.png").convert_alpha()
+play_button_sprite = pygame.transform.scale(play_button_sprite, (180,160))
+play_button_pressed_sprite = pygame.image.load(r"Assets\User_Interface\PlayPressed 36x36.png").convert_alpha()
+play_button_pressed_sprite = pygame.transform.scale(play_button_pressed_sprite, (180,160))
+
+credits_button_sprite = pygame.image.load(r"Assets\User_Interface\Credits 36x36.png").convert_alpha()
+credits_button_sprite = pygame.transform.scale(credits_button_sprite, (180,160))
+credits_button_pressed_sprite = pygame.image.load(r"Assets\User_Interface\CreditsPressed 36x36.png").convert_alpha()
+credits_button_pressed_sprite = pygame.transform.scale(credits_button_pressed_sprite, (180,160))
+
+menu_play_button = menu_button(530, 350, play_button_sprite, play_button_pressed_sprite)
+
+menu_credits_button = menu_button(530, 450, credits_button_sprite, credits_button_pressed_sprite)
+
+menu_buttons = [menu_play_button, menu_credits_button]
+
+#all buttons
+buttons = [to_menu_button, info_button, menu_play_button, menu_credits_button]
+
+#credits
+credits_bg = pygame.image.load(r"Assets\User_Interface\CreditsBackground.png").convert_alpha()
+
+
+
+
+credit_text_1 = text(550, 400, "CREDITS:", 30,(150,20,150))
+
+credit_text_2 = text(540, 440, "Programming:", 25, (100,170,50))
+
+credit_text_3 = text(580, 490, "Naqeeb", 20, (150,20,150))
+
+credit_text_4 = text(450, 530, "Graphics - mostly from itch.io:", 25, (100,170,50))
+
+credit_text_5 = text(400, 570, "ZeggyGames (Character Templates)", 20, (150,20,150))
+credit_text_6 = text(400, 600, "TotusLotus (Coins and Buttons)", 20, (150,20,150))
+credit_text_7 = text(400, 650, "Grand Chaos (Font) - CC-BY-SA 3.0", 20, (150,20,150))
+credit_text_8 = text(400, 690, "Cat_Sopelka (Brick Background)", 20, (150,20,150))
+credit_text_9 = text(400, 730, "Naqeeb (Modifications)", 20, (150,20,150))
+
+
+credit_texts = [credit_text_1, credit_text_2, credit_text_3, credit_text_4, credit_text_5, credit_text_6, credit_text_7, credit_text_8]
+
 
 ################################################################
 
 while game.on == True:
+    player_1 = player("player_1", 400, 350, False)
+
+    player_2 = player("player_2", 500, 350, True)
+    player_2.speed = 6.7
+    player_2.jump_height = 170
+
+    get_player_anims()
 
     game.time = None
     game.start_time = None
     game.end_time = None
     game.time_running = False
+
+
+ # resetting buttons #
+
+    for b in buttons:
+        b.activated = False
 
 
     #resetting alpha for ending screen#
@@ -468,12 +534,6 @@ while game.on == True:
     # resetting sounds #
     pygame.mixer.Sound.stop(alarm_sound)
     alarm_on = False
-
-    ####################
-    # resetting buttons #
-
-    to_menu_button.activated = False
-    info_button.activated = False
 
 
 
@@ -489,8 +549,14 @@ while game.on == True:
 
     while game.mode == "menu":
 
-        screen.fill((255,255,255))
+        #screen.fill((255,255,255))
 
+        screen.blit(menu_bg, (0,0))
+
+        for mb in menu_buttons:
+            screen.blit(mb.current_sprite, (mb.x, mb.y))
+
+        button_effects()
 
         pygame.display.update()
         clock.tick(120)
@@ -498,12 +564,53 @@ while game.on == True:
 
         for event in pygame.event.get():
 
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if pygame.mouse.get_pressed()[0]:
+                    for mb in menu_buttons:
+                        mb.update_sprite_menu()
+            
+            if event.type == pygame.MOUSEBUTTONUP:
+                for mb in menu_buttons:
+                    mb.update_sprite_and_state_menu()
 
             if event.type == pygame.QUIT:
                 pygame.quit()
                 exit()
 
 
+    while game.mode == "credits":
+            
+
+        screen.fill((255,255,255))
+
+        for t in credit_texts:
+            t.display_text(screen)
+
+        screen.blit(credits_bg, (0,0))
+        
+        for mb in ui_buttons_while_game_end_and_credits:
+            screen.blit(mb.current_sprite, (mb.x, mb.y))
+
+        button_effects()
+
+        pygame.display.update()
+        clock.tick(120)
+
+
+        for event in pygame.event.get():
+
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if pygame.mouse.get_pressed()[0]:
+                    for mb in ui_buttons_while_game_end_and_credits:
+                        mb.update_sprite()
+            
+            if event.type == pygame.MOUSEBUTTONUP:
+                for mb in ui_buttons_while_game_end_and_credits:
+                    mb.update_sprite_and_state()
+
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                exit()
 
 
     while game.mode == "game: running":
@@ -543,6 +650,9 @@ while game.on == True:
 
         camera(player_1, player_2, game.platforms, game.horizontally_moving_platforms,SCREEN_WIDTH)
 
+        print(to_menu_button.activated)
+        print(game.mode)
+
         ##################################
 
         for p_p in game.pressure_plates:
@@ -555,8 +665,6 @@ while game.on == True:
             player_1.collided_with_completion_rect = True
         if player_2.rect.colliderect(game.rect_for_checking_completion):
             player_2.collided_with_completion_rect = True
-
-        print(f"{player_1.collided_with_completion_rect} and {player_2.collided_with_completion_rect}")
 
 
     ##############################################
@@ -702,7 +810,7 @@ while game.on == True:
 
         ending_time.display_text(screen)
 
-        for b in ui_buttons_while_game_end:
+        for b in ui_buttons_while_game_end_and_credits:
             screen.blit(b.current_sprite, (b.x, b.y))
 
         button_effects()
@@ -714,12 +822,12 @@ while game.on == True:
 
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if pygame.mouse.get_pressed()[0]:
-                    for b in ui_buttons_while_game_end:
+                    for b in ui_buttons_while_game_end_and_credits:
                         b.update_sprite()
             
             if event.type == pygame.MOUSEBUTTONUP:
                 #if pygame.mouse.get_pressed()[0]:
-                for b in ui_buttons_while_game_end:
+                for b in ui_buttons_while_game_end_and_credits:
                     b.update_sprite_and_state()
 
 
@@ -740,7 +848,7 @@ while game.on == True:
 
         screen.fill((0,0,0))
 
-        for b in ui_buttons_while_game_end:
+        for b in ui_buttons_while_game_end_and_credits:
             screen.blit(b.current_sprite, (b.x, b.y))
         
 
@@ -762,12 +870,11 @@ while game.on == True:
 
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if pygame.mouse.get_pressed()[0]:
-                    for b in ui_buttons_while_game_end:
+                    for b in ui_buttons_while_game_end_and_credits:
                         b.update_sprite()
             
             if event.type == pygame.MOUSEBUTTONUP:
-                #if pygame.mouse.get_pressed()[0]:
-                for b in ui_buttons_while_game_end:
+                for b in ui_buttons_while_game_end_and_credits:
                     b.update_sprite_and_state()
 
 
