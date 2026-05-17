@@ -8,6 +8,7 @@ from Game_Class import *
 from Text_Class import *
 from UI_Button_Class import *
 from Menu_Button_Class import *
+from Background_Class import *
 
 #screen#
 
@@ -134,10 +135,19 @@ display_number_of_coins_font = pygame.font.Font("Assets\Font\Grand9K Pixel.ttf",
 
 ### background ###
 
-background = pygame.image.load("Assets\Map\Background\Dungeon_brick_wall_grey.png").convert_alpha()
-background = pygame.transform.scale(background, (1280, 450))
+background_png = pygame.image.load("Assets\Map\Background\Dungeon_brick_wall_grey.png").convert_alpha()
+background_png = pygame.transform.scale(background_png, (1280, 450))
 
-background_1 = background; background_1.set_alpha(200)
+background_png = background_png; background_png.set_alpha(200)
+
+bg_1 = background(background_png, 0, 0)
+bg_2 = background(background_png, 1280, 0)
+bg_3 = background(background_png, 2560, 0)
+bg_4 = background(background_png, 3840, 0)
+
+
+backgrounds = [bg_1, bg_2, bg_3, bg_4]
+
 
 
 
@@ -307,6 +317,8 @@ def camera(player_1, player_2, platforms, horizontally_moving_platforms,SCREEN_W
     else:
         move = 0
 
+    for background in backgrounds:
+        background.x += (move * 0.5) # slower movement due to platforms jittering at same speed
     for platform in game.platforms:
         platform.x += move
     for object in game.non_collideable_objects:
@@ -620,7 +632,8 @@ while game.on == True:
 
         screen.fill((255,255,255))
 
-        screen.blit(background_1, (0,0))
+        for b in backgrounds:
+            screen.blit(b.png, (b.x,b.y))
 
             ###################################
 
